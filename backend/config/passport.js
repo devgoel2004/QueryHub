@@ -19,7 +19,6 @@ passport.use(
         if (!user) {
           user = new User({
             name: profile.displayName,
-            googleId: profile.id,
             image: profile.photos[0].value,
             email: profile.emails[0].value,
             tags: [],
@@ -51,7 +50,6 @@ passport.use(
           });
         }
         let token = generateToken(user);
-
         user.token = token;
         await user.save();
         return done(null, user);

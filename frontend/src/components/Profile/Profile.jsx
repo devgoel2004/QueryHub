@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loader from "../Loader/Loader";
+import "./Profile.css";
 import { useAlert } from "react-alert";
 const Profile = () => {
   const [user, setUser] = useState("");
+  const [date, setDate] = useState("");
   const navigate = useNavigate();
   const alert = useAlert();
   useEffect(() => {
@@ -14,6 +16,9 @@ const Profile = () => {
           withCredentials: true,
         });
         setUser(data.user);
+        const timeStamp = data.user.joinedOn;
+        const date = new Date(timeStamp);
+        setDate(date.toLocaleDateString());
       } catch (error) {
         alert.error(error);
         console.error("Error fetching user:", error);
@@ -21,21 +26,45 @@ const Profile = () => {
       }
     };
     fetchUser();
-  }, []);
+  }, [navigate, alert]);
   const handleLogout = () => {
     window.open("http://localhost:8000/logout", "_self");
   };
   return (
-    <div>
+    <div className="profile">
       {user ? (
-        <>
+        <div style={{ textAlign: "center" }}>
           <h2>Welcome {user.name}</h2>
-          <img src={user.image} alt="Profile" />
+          <img
+            src={user.image}
+            alt="Profile"
+            style={{ alignContent: "center" }}
+          />
+          {user.about ? (
+            <>
+              <p>About:{user.about}</p>
+            </>
+          ) : (
+            <></>
+          )}
+          <p>
+            {user.tags ? (
+              <>
+                <p>{user.tags}</p>
+              </>
+            ) : (
+              <></>
+            )}
+          </p>
           <p>Email: {user.email}</p>
-          <p>Badge: {user.badge}</p>
-          <p>Date: {user.joinedOn}</p>
-          <button onClick={handleLogout}>Logout</button>
-        </>
+          <p>
+            Badge: <span className={`${user.badge}`}>{user.badge}</span>
+          </p>
+          <p>Date: {date}</p>
+          <button className="button" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       ) : (
         <>
           <Loader />

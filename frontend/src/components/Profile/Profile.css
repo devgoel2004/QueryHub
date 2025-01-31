@@ -1,0 +1,34 @@
+.newbie {
+  color: black;
+}
+.pupil {
+  color: darkgreen;
+}
+.specialist {
+  color: green;
+}
+.expert {
+  color: blue;
+}
+.candidate-master {
+  color: purple;
+}
+.master {
+  color: yellow;
+}
+
+.grand-master {
+  color: red;
+}
+
+.profile p,
+span {
+  font-weight: 400;
+  font-size: small;
+}
+.profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}

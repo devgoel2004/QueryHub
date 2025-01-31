@@ -9,7 +9,7 @@ import Error from "./components/Error/Error";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 function App() {
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   // const getUser = async () => {
   //   try {
   //     const url = `http://localhost:8000/auth/login/success`;

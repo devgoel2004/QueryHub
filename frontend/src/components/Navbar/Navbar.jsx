@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { useSelector, useDispatch } from "react-redux";
 import { FaBars } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { FaArrowRight } from "react-icons/fa";
 import "./Navbar.css";
+import { useAlert } from "react-alert";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+import Cookies from "js-cookie";
 const Navbar = () => {
   const navigate = useNavigate();
   const User = null;
+  const alert = useAlert();
+  const [image, setImage] = useState("");
   const Logo =
     "https://p7.hiclipart.com/preview/911/267/631/web-development-computer-icons-website.jpg";
   const searchImage =
@@ -16,8 +22,27 @@ const Navbar = () => {
   const handleSlideIn = () => {
     setHandler(!handler);
   };
-  //   const dispatch = useDispatch();
-  //   const navigate = useNavigate();
+  const handleLogout = () => {
+    window.open("http://localhost:8000/auth/logout", "_self");
+  };
+  const token = Cookies.get();
+  console.log(token);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const { data } = await axios.get("http://localhost:8000/auth/profile", {
+  //         withCredentials: true,
+  //       });
+  //       console.log(data);
+  //       setImage(data.user.image);
+  //     } catch (error) {
+  //       alert.error(error);
+  //       console.error("Error fetching user:", error);
+  //       // navigate("/");
+  //     }
+  //   };
+  //   fetchUser();
+  // }, []);
   return (
     <>
       <nav className={`main-nav`}>
@@ -67,23 +92,13 @@ const Navbar = () => {
             </Link>
           </div>
           <div className={`navbar-2`}>
-            {User === null ? (
+            {image === "" ? (
               <Link to="/queryhub/login" className="nav-item nav-links ">
                 Log in
               </Link>
             ) : (
               <>
-                <Avatar
-                  backgroundColor="#009dff"
-                  px="10px"
-                  py="7px"
-                  borderRadius="50%">
-                  <Link
-                    to={`/queryhub/user/${User?.result?._id}`}
-                    style={{ color: "white", textDecoration: "none" }}>
-                    {User?.result.name.charAt(0).toUpperCase()}
-                  </Link>
-                </Avatar>
+                <img src={image} alt="" />
                 <button className="nav-item nav-links" onClick={handleLogout}>
                   Log out
                 </button>
