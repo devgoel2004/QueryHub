@@ -1,69 +1,76 @@
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const passport = require("passport");
-const session = require("express-session");
-const dotenv = require("dotenv");
-dotenv.config();
 const express = require("express");
+const passport = require("passport");
+const jwt = require("jsonwebtoken");
+const User = require("../models/userModel");
+const { generateToken } = require("../utils/generateToken");
+require("../config/passport");
 const router = express.Router();
-const authRoute = express();
-authRoute.use(
-  session({
-    secret: "your_secret_key",
-    resave: false,
-    saveUninitialized: true,
+
+//Google Auth Route
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
   })
 );
-authRoute.use(passport.initialize());
-authRoute.use(passport.session());
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:8000/auth/google/callback",
-    },
-    (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
-    }
-  )
-);
 
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
-// Google Authentication Route
-
-authRoute.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
-authRoute.get(
-  "/auth/google/callback",
+//Google callback route
+router.get(
+  "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:5173/queryhub",
+    failureRedirect: "http://localhost:5173/queryhub/login",
   }),
   (req, res) => {
-    res.redirect("http://localhost:5173/queryhub/profile"); // Redirect to frontend profile page
+    const token = generateToken(req.user);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+    });
+    res.redirect("http://localhost:5173/queryhub/profile");
   }
 );
+router.get("/alluser", async (req, res) => {
+  const users = await User.find();
+  res.send(users);
+});
+//Get User profile
+router.get("/profile", async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
 
-authRoute.get("/profile", (req, res) => {
-  if (req.user) {
-    res.json(req.user);
-  } else {
-    res.status(401).json({ message: "Unauthorized" });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!decoded) {
+      return res.status(401).json({
+        message: "Not verified",
+      });
+    }
+    const user = await User.findOne({ email: decoded.email });
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+    res.status(200).json({
+      user,
+    });
+  } catch (error) {
+    res.status(401).json({
+      message: "Invalid token",
+    });
   }
 });
 
-// Logout
-authRoute.get("/logout", (req, res) => {
-  req.logout(() => {
+//Logout Route
+router.get("/logout", (req, res) => {
+  res.clearCookie("token");
+  req.logOut(() => {
     res.redirect("http://localhost:5173/queryhub");
   });
 });
-module.exports = authRoute;
+
+module.exports = router;

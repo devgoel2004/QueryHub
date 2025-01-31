@@ -9,7 +9,7 @@ const sendEmail = async (options) => {
     },
   });
   const mailOptions = {
-    fronm: process.env.APP_EMAIL,
+    from: process.env.APP_EMAIL,
     to: options.email,
     subject: options.subject,
     text: options.message,

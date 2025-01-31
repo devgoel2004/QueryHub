@@ -1,8 +1,14 @@
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
 const userSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
+  },
+  image: {
+    type: String,
+    default: process.env.USER_ICON,
   },
   email: {
     type: String,
@@ -10,15 +16,14 @@ const userSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    // required: true,
   },
   about: {
     type: String,
-    // required: true,
   },
   tags: {
     type: [String],
-    // required: true,
+    default: [],
   },
   score1: {
     type: Number,
@@ -51,4 +56,4 @@ const userSchema = mongoose.Schema({
     default: Date.now,
   },
 });
-export default mongoose.model("User", userSchema);
+module.exports = mongoose.model("User", userSchema);

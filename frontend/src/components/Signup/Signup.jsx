@@ -1,29 +1,31 @@
 import React, { useState } from "react";
-import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import "./Signup.css";
 import { Link, useNavigate } from "react-router-dom";
+import MetaData from "../MetaData/MetaData";
 const Signup = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUserName] = useState("");
-  const loginSubmit = () => {};
-  const handleGoogleLogin = () => {
+  const signupSubmit = () => {};
+  const handleGoogleSignup = () => {
     window.open("http://localhost:8000/auth/google", "_self");
   };
   return (
     <>
+      <MetaData title={"Sign Up Page"} />
       <div className="body">
         <div className="container" id="container">
           <div className="form-container sign-in-container">
-            <form className="form-login" onSubmit={loginSubmit}>
+            <form className="form-login" onSubmit={signupSubmit}>
               <h1>Sign Up</h1>
               <div className="social-container">
                 <a href="#" className="social">
                   <FaGithub className="icons"></FaGithub>
                 </a>
-                <a onClick={handleGoogleLogin} href="#" className="social">
+                <a onClick={handleGoogleSignup} href="#" className="social">
                   <FcGoogle className="icons" />
                 </a>
                 <a href="#" className="social">
@@ -56,7 +58,7 @@ const Signup = () => {
                 Register
               </button>
               <p className="create-account">
-                Create Account:{" "}
+                Have Account:{" "}
                 <span onClick={() => navigate("/queryhub/login")}>Login</span>
               </p>
             </form>
@@ -75,13 +77,14 @@ const Signup = () => {
               <div className="overlay-panel overlay-right">
                 <h1>Hello, Developers!</h1>
                 <p>Enter your personal details and start journey with us</p>
+                <p style={{ fontSize: "small" }}>Have Account? </p>
                 <button
                   onClick={() => {
-                    navigate("/queryhub/signup");
+                    navigate("/queryhub/login");
                   }}
                   className="ghost button"
                   id="signUp">
-                  Sign Up
+                  Sign In
                 </button>
               </div>
             </div>
