@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./Login.css";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import MetaData from "../MetaData/MetaData";

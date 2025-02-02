@@ -8,6 +8,8 @@ import Navbar from "./components/Navbar/Navbar";
 import Error from "./components/Error/Error";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
+import UpdateProfile from "./components/Profile/UpdateProfile";
 function App() {
   // const [user, setUser] = useState(null);
   // const getUser = async () => {
@@ -30,6 +32,16 @@ function App() {
         <Route exact path="/queryhub/signup" element={<Signup />} />
         <Route exact path="/queryhub" element={<Home />} />
         <Route exact path="/queryhub/profile" element={<Profile />} />
+        <Route
+          exact
+          path="/queryhub/forgot/password"
+          element={<ForgotPassword />}
+        />
+        <Route
+          exact
+          path="/queryhub/profile/update"
+          element={<UpdateProfile />}
+        />
         <Route path="*" element={<Error />} />
       </Routes>
     </>

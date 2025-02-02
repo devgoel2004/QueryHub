@@ -9,6 +9,9 @@ const Profile = () => {
   const [date, setDate] = useState("");
   const navigate = useNavigate();
   const alert = useAlert();
+  const updateNavigate = () => {
+    navigate("/queryhub/profile/update");
+  };
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -21,8 +24,7 @@ const Profile = () => {
         setDate(date.toLocaleDateString());
       } catch (error) {
         alert.error(error);
-        console.error("Error fetching user:", error);
-        navigate("/");
+        navigate("/queryhub");
       }
     };
     fetchUser();
@@ -36,7 +38,7 @@ const Profile = () => {
         <div style={{ textAlign: "center" }}>
           <h2>Welcome {user.name}</h2>
           <img
-            src={user.image}
+            src={user && user.image}
             alt="Profile"
             style={{ alignContent: "center" }}
           />
@@ -63,6 +65,11 @@ const Profile = () => {
           <p>Date: {date}</p>
           <button className="button" onClick={handleLogout}>
             Logout
+          </button>
+          <br />
+          <br />
+          <button className="button" onClick={updateNavigate}>
+            UPDATE PROFILE
           </button>
         </div>
       ) : (

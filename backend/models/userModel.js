@@ -23,6 +23,10 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
   },
+  phone: {
+    type: Number,
+    validate: [validator.isMobilePhone, "Please enter a valid mobile number"],
+  },
   about: {
     type: String,
   },
@@ -61,12 +65,10 @@ const userSchema = mongoose.Schema({
   },
 });
 userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
+  if (!this.isModified("password")) {
     next();
   }
-  if (!this.password) {
-    return;
-  }
+  console.log(this.password);
   this.password = await bcrypt.hash(this.password, 10);
 });
 

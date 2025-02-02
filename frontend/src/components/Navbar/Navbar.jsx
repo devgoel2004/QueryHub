@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { useSelector, useDispatch } from "react-redux";
 import { FaBars } from "react-icons/fa";
-import toast from "react-hot-toast";
 import { FaArrowRight } from "react-icons/fa";
 import "./Navbar.css";
 import { useAlert } from "react-alert";
-import { useCookies } from "react-cookie";
 import axios from "axios";
 import Cookies from "js-cookie";
 const Navbar = () => {
@@ -22,27 +20,24 @@ const Navbar = () => {
   const handleSlideIn = () => {
     setHandler(!handler);
   };
-  const handleLogout = () => {
-    window.open("http://localhost:8000/auth/logout", "_self");
-  };
-  const token = Cookies.get();
-  console.log(token);
+  // const handleLogout = () => {
+  //   window.open("http://localhost:8000/auth/logout", "_self");
+  // };
+  // const fetchUser = async () => {
+  //   try {
+  //     const { data } = await axios.get("http://localhost:8000/auth/profile", {
+  //       withCredentials: true,
+  //     });
+  //     setImage(data.user.image);
+  //   } catch (error) {
+  //     alert.error(error);
+  //     navigate("/queryhub");
+  //   }
+  // };
   // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const { data } = await axios.get("http://localhost:8000/auth/profile", {
-  //         withCredentials: true,
-  //       });
-  //       console.log(data);
-  //       setImage(data.user.image);
-  //     } catch (error) {
-  //       alert.error(error);
-  //       console.error("Error fetching user:", error);
-  //       // navigate("/");
-  //     }
-  //   };
   //   fetchUser();
   // }, []);
+  // console.log(image);
   return (
     <>
       <nav className={`main-nav`}>
@@ -98,7 +93,19 @@ const Navbar = () => {
               </Link>
             ) : (
               <>
-                <img src={image} alt="" />
+                <img
+                  src={image}
+                  alt="image-icon"
+                  style={{
+                    height: "35px",
+                    width: "35px",
+                    cursor: "pointer",
+                    borderRadius: "50%",
+                  }}
+                  onClick={() => {
+                    navigate("/queryhub/profile");
+                  }}
+                />
                 <button className="nav-item nav-links" onClick={handleLogout}>
                   Log out
                 </button>

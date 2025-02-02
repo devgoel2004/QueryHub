@@ -6,7 +6,7 @@ const passport = require("passport");
 const fileUpload = require("express-fileupload");
 const session = require("express-session");
 const authRoute = require("./routes/authRoute");
-
+const userRoute = require("./routes/userRoute");
 const app = express();
 const mongoose = require("mongoose");
 require("dotenv").config();
@@ -43,6 +43,7 @@ app.use(fileUpload());
 app.use(passport.initialize());
 //Routes
 app.use("/auth", authRoute); // Google auth route
+app.use("/user", userRoute);
 app.get("/", (req, res) => {
   res.send("Server is working fine");
 });

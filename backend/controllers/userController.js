@@ -2,33 +2,33 @@ const crypto = require("crypto");
 const User = require("../models/userModel");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const generateToken = require("../utils/generateToken");
-const sendToken = require("../utils/generateToken");
+const { sendToken } = require("../utils/generateToken");
 const cloudinary = require("cloudinary");
 const ErrorHandler = require("../utils/errorHandler");
 const sendEmail = require("../utils/sendEmail");
 //Register a User
+//need to add cloudinary
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    folder: "avatars",
-    width: 150,
-    crop: "scale",
-  });
+  // const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+  //   folder: "avatars",
+  //   width: 150,
+  //   crop: "scale",
+  // });
   const { name, email, password } = req.body;
   const findUser = await User.findOne({ email: email });
+  // console.log(findUser);
   if (findUser) {
     return next(new ErrorHandler("user exists", 401));
   }
-  const user = new User({
+  const user = await User.create({
     name,
     email,
     password,
-    image: myCloud.secure_url,
   });
-  await user.save();
   sendEmail({
-    email: profile.emails[0].value,
+    email: email,
     subject: "Welcome to QueryHub - Let's Build, Learn & Grow Together!",
-    message: `Hi ${profile.displayName},
+    message: `Hi ${name},
 
               Welcome to QueryHub! 🚀 We're thrilled to have you on board.
 
