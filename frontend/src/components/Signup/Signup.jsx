@@ -1,18 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import "./Signup.css";
 import { Link, useNavigate } from "react-router-dom";
 import MetaData from "../MetaData/MetaData";
+import { clearErrors, register } from "../../actions/userActions";
+import { useDispatch, useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 const Signup = () => {
+  const dispatch = useDispatch();
+  const alert = useAlert();
   const navigate = useNavigate();
+  const { error, loading, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUserName] = useState("");
-  const signupSubmit = () => {};
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [user, setUser] = useState({
+    email: "",
+    name: "",
+    image: "",
+    password: "",
+  });
+  const registerDataChange = (e) => {
+    if (e.target.name === "image") {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImage(reader.result);
+          setImagePreview(reader.result);
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    } else {
+      setUser({ ...user, [e.target.name]: e.target.value });
+    }
+  };
+  const signupSubmit = (e) => {
+    e.preventDefault();
+    console.log("hello world");
+    // console.log(user);
+    const myForm = new FormData();
+    myForm.set("name", name);
+    myForm.set("email", email);
+    myForm.set("password", password);
+    myForm.set("image", image);
+    dispatch(register(myForm));
+  };
   const handleGoogleSignup = () => {
     window.open("http://localhost:8000/auth/google", "_self");
   };
+  useEffect(() => {
+    if (error) {
+      console.log(error);
+      dispatch(clearErrors());
+    }
+    if (isAuthenticated) {
+      alert.success("Already Logged In");
+      navigate(`/queryhub/profile`);
+    }
+  }, [dispatch, error, alert, isAuthenticated]);
   return (
     <>
       <MetaData title={"Sign Up Page"} />
@@ -37,22 +87,31 @@ const Signup = () => {
                 className="input"
                 type="username"
                 placeholder="User Name"
-                value={username}
-                onChange={(e) => setUserName(e.target.value)}
+                value={name}
+                onChange={registerDataChange}
               />
               <input
                 className="input"
                 type="email"
                 placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={registerDataChange}
               />
+              <input
+                className="input"
+                type="file"
+                placeholder="Image"
+                value={image}
+                accept="image/*"
+                onChange={registerDataChange}
+              />
+              <img src={imagePreview} alt="" />
               <input
                 className="input"
                 type="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={registerDataChange}
               />
               <button type="submit" className="button">
                 Register

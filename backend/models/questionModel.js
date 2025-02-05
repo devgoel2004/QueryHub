@@ -1,14 +1,10 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const QuestionSchema = mongoose.Schema({
   questionTitle: {
     type: String,
     required: true,
   },
   questionBody: {
-    type: String,
-    required: true,
-  },
-  userPosted: {
     type: String,
     required: true,
   },
@@ -28,9 +24,10 @@ const QuestionSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
-
-  userId: {
-    type: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
   postedOn: {
     type: Date,
@@ -45,4 +42,5 @@ const QuestionSchema = mongoose.Schema({
     },
   ],
 });
-export default mongoose.model("Question", QuestionSchema);
+
+module.exports = mongoose.model("Question", QuestionSchema);

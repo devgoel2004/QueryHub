@@ -2,16 +2,11 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import {
-  transitions,
-  positions,
-  Provider as AlertProvider,
-  Provider,
-} from "react-alert";
+import { transitions, positions, Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import { BrowserRouter } from "react-router-dom";
-
-const store = "./store";
+import store from "./store.js";
+import { Provider } from "react-redux";
 const options = {
   position: positions.BOTTOM_CENTER,
   timeout: 2000,

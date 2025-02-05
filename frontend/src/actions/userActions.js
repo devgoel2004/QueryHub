@@ -20,9 +20,7 @@ import {
   UPDATE_PASSWORD_FAIL,
 } from "../constants/userConstants";
 import axios from "axios";
-import dotenv from "dotenv";
-dotenv.config();
-const url = process.env.URL;
+const url = "http://localhost:8000";
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({
@@ -35,7 +33,7 @@ export const login = (email, password) => async (dispatch) => {
       withCredentials: true,
     };
     const { data } = await axios.post(
-      `${process.env.URL}/user/login`,
+      `${url}/user/login`,
       { email, password },
       config
     );
@@ -62,11 +60,7 @@ export const register = (userData) => async (dispatch) => {
       },
       withCredentials: true,
     };
-    const { data } = await axios.post(
-      `${process.env.URL}/user/register`,
-      userData,
-      config
-    );
+    const { data } = await axios.post(`${url}/user/register`, userData, config);
     dispatch({
       type: REGISTER_SUCCESS,
       payload: data.user,

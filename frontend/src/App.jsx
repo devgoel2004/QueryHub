@@ -10,6 +10,8 @@ import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import UpdateProfile from "./components/Profile/UpdateProfile";
+import UpdatePassword from "./components/Profile/UpdatePassword";
+import PostQuestion from "./components/PostQuestion/PostQuestion";
 function App() {
   // const [user, setUser] = useState(null);
   // const getUser = async () => {
@@ -34,7 +36,7 @@ function App() {
         <Route exact path="/queryhub/profile" element={<Profile />} />
         <Route
           exact
-          path="/queryhub/forgot/password"
+          path="/queryhub/password/forgot"
           element={<ForgotPassword />}
         />
         <Route
@@ -42,6 +44,15 @@ function App() {
           path="/queryhub/profile/update"
           element={<UpdateProfile />}
         />
+        <Route
+          exact
+          path="/queryhub/password/update"
+          element={<UpdatePassword />}
+        />
+        <Route
+          exact
+          path="/queryhub/question/create"
+          element={<PostQuestion />}></Route>
         <Route path="*" element={<Error />} />
       </Routes>
     </>

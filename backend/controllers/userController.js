@@ -20,6 +20,9 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   if (findUser) {
     return next(new ErrorHandler("user exists", 401));
   }
+  if (!password || !name) {
+    return next(new ErrorHandler("Enter password or name", 404));
+  }
   const user = await User.create({
     name,
     email,

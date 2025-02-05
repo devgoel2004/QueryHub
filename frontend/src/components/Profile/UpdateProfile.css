@@ -1,0 +1,31 @@
+.update-profile,
+.update-password {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100vw;
+}
+.form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  min-width: 50vw;
+}
+.form input,
+.button {
+  min-width: 25vw;
+  padding: 5px 8px;
+  margin: 4px 6px;
+}
+.form .button {
+  padding: 8px 10px;
+}
+@media (max-width: 760px) {
+  .form input,
+  .button {
+    min-width: 50vw;
+    padding: 5px 8px;
+    margin: 4px 6px;
+  }
+}
