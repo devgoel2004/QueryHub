@@ -61,6 +61,7 @@ export const register = (userData) => async (dispatch) => {
       withCredentials: true,
     };
     const { data } = await axios.post(`${url}/user/register`, userData, config);
+    console.log(data);
     dispatch({
       type: REGISTER_SUCCESS,
       payload: data.user,

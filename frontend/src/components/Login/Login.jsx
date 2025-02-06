@@ -6,7 +6,9 @@ import MetaData from "../MetaData/MetaData";
 import { clearErrors, login } from "../../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Loader/Loader";
+import { useAlert } from "react-alert";
 const Login = () => {
+  const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { error, loading, isAuthenticated } = useSelector(

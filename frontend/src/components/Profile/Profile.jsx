@@ -15,16 +15,17 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await axios.get("http://localhost:8000/auth/profile", {
+        const { data } = await axios.get("http://localhost:8000/user/me", {
           withCredentials: true,
         });
+        console.log(data);
         setUser(data.user);
         const timeStamp = data.user.joinedOn;
         const date = new Date(timeStamp);
         setDate(date.toLocaleDateString());
       } catch (error) {
+        console.log(error);
         alert.error(error);
-        navigate("/queryhub");
       }
     };
     fetchUser();

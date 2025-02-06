@@ -25,20 +25,6 @@ const Signup = () => {
     image: "",
     password: "",
   });
-  const registerDataChange = (e) => {
-    if (e.target.name === "image") {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setImage(reader.result);
-          setImagePreview(reader.result);
-        }
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    } else {
-      setUser({ ...user, [e.target.name]: e.target.value });
-    }
-  };
   const signupSubmit = (e) => {
     e.preventDefault();
     console.log("hello world");
@@ -60,7 +46,7 @@ const Signup = () => {
     }
     if (isAuthenticated) {
       alert.success("Already Logged In");
-      navigate(`/queryhub/profile`);
+      navigate(`/queryhub/login`);
     }
   }, [dispatch, error, alert, isAuthenticated]);
   return (
@@ -88,14 +74,18 @@ const Signup = () => {
                 type="username"
                 placeholder="User Name"
                 value={name}
-                onChange={registerDataChange}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
               />
               <input
                 className="input"
                 type="email"
                 placeholder="Email"
                 value={email}
-                onChange={registerDataChange}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
               />
               <input
                 className="input"
@@ -103,7 +93,16 @@ const Signup = () => {
                 placeholder="Image"
                 value={image}
                 accept="image/*"
-                onChange={registerDataChange}
+                onChange={(e) => {
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    if (reader.readyState === 2) {
+                      setImage(reader.result);
+                      setImagePreview(reader.result);
+                    }
+                  };
+                  reader.readAsDataURL(e.target.files[0]);
+                }}
               />
               <img src={imagePreview} alt="" />
               <input
@@ -111,7 +110,9 @@ const Signup = () => {
                 type="password"
                 placeholder="Password"
                 value={password}
-                onChange={registerDataChange}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
               />
               <button type="submit" className="button">
                 Register

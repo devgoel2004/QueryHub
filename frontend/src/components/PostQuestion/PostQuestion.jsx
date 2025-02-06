@@ -1,30 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 import "./PostQuestion.css";
+import MetaData from "../MetaData/MetaData";
 const PostQuestion = () => {
+  const [tags, setTags] = useState([]);
+  const [tag, setTag] = useState("");
+  const addTags = (e) => {
+    e.preventDefault();
+    setTags([...tags, tag]);
+  };
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}>
-      <h1>Create Question</h1>
-
-      <form
-        action=""
+    <>
+      <MetaData title={"Create Question"} />
+      <div
         style={{
+          minHeight: "90vh",
           display: "flex",
-          alignItems: "center",
           flexDirection: "column",
-          minWidth: "50vw",
+          alignItems: "center",
+          marginTop: "70px",
+          // justifyContent: "center",
         }}>
-        <input type="text" placeholder="Question Title" />
-        <textarea type="text" placeholder="Question Body" />
-        <input type="text" placeholder="Question Tags" />
-      </form>
-    </div>
+        <h1>Create Question</h1>
+        <form action="" className="form">
+          <input type="text" placeholder="Question Title" />
+          <textarea type="text" placeholder="Question Body" className="input" />
+          <div>
+            <input
+              type="text"
+              placeholder="Question Tags"
+              value={tag}
+              onChange={(e) => setTag(e.target.value)}
+            />
+            <button
+              style={{
+                backgroundColor: "tomato",
+                padding: "10px 10px",
+                border: "none",
+                color: "white",
+                fontWeight: "500",
+                borderRadius: "50%",
+                cursor: "pointer",
+              }}
+              onClick={addTags}>
+              Add
+            </button>
+            <ul className="tag-list">
+              {tags.map((tag, index) => (
+                <li key={index} className="tag-list-item">
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <input type="submit" className="button" />
+        </form>
+      </div>
+    </>
   );
 };
 

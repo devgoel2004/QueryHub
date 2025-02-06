@@ -1,0 +1,114 @@
+.questions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px 0;
+}
+
+.questions-header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.ask-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.ask-button:hover {
+  background-color: #0056b3;
+}
+
+/* Filter Section */
+.filter {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding: 10px 0;
+  font-weight: 500;
+  border-bottom: 2px solid #ddd;
+}
+
+.filter span {
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+.filter span:hover {
+  background-color: #e9ecef;
+}
+
+/* Question List */
+.question-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.list-item {
+  background: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.list-item:hover {
+  transform: scale(1.02);
+}
+
+.list-item h1 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.list-item p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Tags */
+.list-item ul {
+  display: flex;
+  gap: 8px;
+  padding: 0;
+  margin-top: 8px;
+}
+
+.list-item ul li {
+  list-style: none;
+  background: #007bff;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+}
+
+/* Voting Buttons */
+.list-item .button-tags {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: 0.3s;
+}
+
+.list-item .button-tags:hover {
+  transform: scale(1.1);
+}
+.question-container p {
+  font-weight: 400;
+}

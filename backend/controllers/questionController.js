@@ -2,7 +2,8 @@ const Question = require("../models/questionModel");
 //ASK QUESTION
 exports.askQuestion = async (req, res) => {
   try {
-    const { questionTitle, questionBody, questionTags, user } = req.body;
+    const { questionTitle, questionBody, questionTags } = req.body;
+    const user = req.user._id;
     const postQuestion = new Question({
       questionBody,
       questionTitle,
@@ -27,7 +28,7 @@ exports.askQuestion = async (req, res) => {
         message: "Question Tags is required",
       });
     }
-    const question = await Question.save();
+    const question = await postQuestion.save();
     res.status(200).json({
       success: true,
       message: "Question Posted successfully",
