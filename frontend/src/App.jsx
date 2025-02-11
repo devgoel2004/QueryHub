@@ -1,7 +1,6 @@
 import "./App.css";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Navbar from "./components/Navbar/Navbar";
@@ -14,8 +13,13 @@ import UpdatePassword from "./components/Profile/UpdatePassword";
 import PostQuestion from "./components/PostQuestion/PostQuestion";
 import Questions from "./components/Questions/Questions";
 import QuestionDetails from "./components/QuestionDetails/QuestionDetails";
+import store from "./store";
+import { loadUser } from "./actions/userActions";
 function App() {
   // const [user, setUser] = useState(null);
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
   // const getUser = async () => {
   //   try {
   //     const url = `http://localhost:8000/auth/login/success`;
@@ -48,7 +52,7 @@ function App() {
         />
         <Route
           exact
-          path="/queryhub/password/update"
+          path="/queryhub/update/password"
           element={<UpdatePassword />}
         />
         <Route

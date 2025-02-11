@@ -30,10 +30,6 @@ const userSchema = mongoose.Schema({
   about: {
     type: String,
   },
-  tags: {
-    type: [String],
-    default: [],
-  },
   score1: {
     type: Number,
     default: 0,

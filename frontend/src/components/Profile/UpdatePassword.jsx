@@ -1,18 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./UpdateProfile.css";
 import { useAlert } from "react-alert";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { updatePassword } from "../../actions/userActions";
 const UpdatePassword = () => {
-  alert = useAlert();
+  const alert = useAlert();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const updatePasswordHandler = () => {
+  const { user, isAuthenticated, loading } = useSelector((state) => state.user);
+  const updatePasswordHandler = (e) => {
+    e.preventDefault();
+    const userData = {
+      oldPassword,
+      newPassword,
+      confirmPassword,
+    };
     console.log("hello world");
     console.log(newPassword);
     if (newPassword !== confirmPassword) {
       window.alert("New Password and update Password must be same");
     }
+    dispatch(updatePassword(userData));
   };
+  useEffect(() => {
+    if (!isAuthenticated) {
+      // alert.error("login to access this resources");
+      // navigate("/queryhub/login");
+    }
+    console.log(user);
+  }, [isAuthenticated]);
   return (
     <>
       <div className="update-password">

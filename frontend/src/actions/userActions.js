@@ -61,7 +61,6 @@ export const register = (userData) => async (dispatch) => {
       withCredentials: true,
     };
     const { data } = await axios.post(`${url}/user/register`, userData, config);
-    console.log(data);
     dispatch({
       type: REGISTER_SUCCESS,
       payload: data.user,
@@ -81,7 +80,7 @@ export const loadUser = () => async (dispatch) => {
     dispatch({
       type: LOAD_USER_REQUEST,
     });
-    const { data } = await axios.post(`${url}/user/me`, {
+    const { data } = await axios.get(`${url}/user/me`, {
       withCredentials: true,
     });
     dispatch({
@@ -127,7 +126,9 @@ export const updateProfile = (userData) => async (dispatch) => {
       },
       withCredentials: true,
     };
+    console.log(userData);
     const { data } = await axios.put(`${url}/user/me/update`, userData, config);
+    console.log(data);
     dispatch({
       type: UPDATE_PROFILE_SUCCESS,
       payload: data.success,
@@ -156,6 +157,7 @@ export const updatePassword = (password) => async (dispatch) => {
       password,
       config
     );
+    console.log(data)
     dispatch({
       type: UPDATE_PASSWORD_SUCCESS,
       payload: data.success,

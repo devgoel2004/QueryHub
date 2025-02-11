@@ -8,6 +8,11 @@ import {
   userReducer,
   profileReducer,
 } from "./reducers/usersReducer";
+import {
+  questionsReducer,
+  questionDetailsReducer,
+  questionCrudReducer,
+} from "./reducers/questionReducer";
 
 const reducer = combineReducers({
   user: userReducer,
@@ -15,6 +20,9 @@ const reducer = combineReducers({
   updateUser: updateReducer,
   forgotPassword: forgotPasswordReducer,
   profile: profileReducer,
+  questions: questionsReducer,
+  questionDetails: questionDetailsReducer,
+  questionCrud: questionCrudReducer,
 });
 let initialState = {};
 const middleWare = [thunk];

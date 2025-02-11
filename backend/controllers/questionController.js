@@ -126,3 +126,28 @@ exports.voteQuestion = async (req, res) => {
     });
   }
 };
+
+exports.getQuestion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const question = await Question.findById(id);
+    if (!question) {
+      return res.status(404).json({
+        success: false,
+        message: "No question found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      question,
+    });
+  } catch (error) {
+    // console.log(error);
+    return res.status(500).json({
+      success: false,
+      error,
+      message: "Something went wrong",
+    });
+  }
+};

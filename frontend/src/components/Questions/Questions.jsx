@@ -15,7 +15,7 @@ const Questions = () => {
       const { data } = await axios.get(`http://localhost:8000/question`);
       setQuestions(data.questions);
       setCount(data.questions.length);
-      console.log(questions);
+      console.log(data.questions);
       console.log(questions[0].upVote - questions[0].downVote);
     } catch (error) {
       console.log(error);
@@ -109,6 +109,14 @@ const Questions = () => {
                     </p>{" "}
                   </>
                 )}
+                <p>
+                  {question.answer.length === 0 ? (
+                    <>No </>
+                  ) : (
+                    <>question.answer.length</>
+                  )}
+                  Answers
+                </p>
                 <button
                   style={{
                     minWidth: "50%",

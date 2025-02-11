@@ -237,6 +237,7 @@ exports.updatePassword = async (req, res, next) => {
         message: "Old password does not matched",
       });
     }
+    console.log(req.body.newPassword);
     if (req.body.newPassword !== req.body.confirmPassword) {
       return res.status(400).json({
         success: false,
@@ -258,21 +259,27 @@ exports.updatePassword = async (req, res, next) => {
 //update user profile
 exports.updateProfile = async (req, res, next) => {
   try {
+    console.log(req.user._id);
+    const { name } = req.body;
+    console.log(name);
     const newUserData = {
       name: req.body.name,
       email: req.body.email,
       about: req.body.about,
       tags: req.body.tags,
+      phone: req.body.phone,
     };
-    if (req.body.image) {
-      const user = await User.findById(req.user.id);
-      const myCloud = await cloudinary.v2.uploader.upload(req.body.image, {
-        folder: "avatars",
-        width: 150,
-        crop: "scale",
-      });
-      newUserData.image = myCloud.secure_url;
-    }
+    // console.log(phone);
+    console.log(newUserData);
+    // if (req.body.image) {
+    //   const user = await User.findById(req.user.id);
+    //   const myCloud = await cloudinary.v2.uploader.upload(req.body.image, {
+    //     folder: "avatars",
+    //     width: 150,
+    //     crop: "scale",
+    //   });
+    //   newUserData.image = myCloud.secure_url;
+    // }
     const user = await User.findByIdAndUpdate(req.user.id, newUserData);
     res.status(200).json({
       success: true,
@@ -347,6 +354,30 @@ exports.deleteUser = async (req, res, next) => {
     return res.status(500).json({
       success: "false",
       message: error,
+    });
+  }
+};
+
+//GET SINGLE USER DETAILS
+exports.getSingleUserDetails = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "no user found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal error",
+      error
     });
   }
 };

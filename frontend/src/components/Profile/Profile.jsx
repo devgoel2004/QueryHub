@@ -1,82 +1,86 @@
-import React, { useState, useEffect, useReducer } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "../Loader/Loader";
 import "./Profile.css";
 import { useAlert } from "react-alert";
+import { useSelector } from "react-redux";
+
 const Profile = () => {
-  const [user, setUser] = useState("");
-  const [date, setDate] = useState("");
   const navigate = useNavigate();
+  const { user, error, loading, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
   const alert = useAlert();
   const updateNavigate = () => {
     navigate("/queryhub/profile/update");
   };
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:8000/user/me", {
-          withCredentials: true,
-        });
-        console.log(data);
-        setUser(data.user);
-        const timeStamp = data.user.joinedOn;
-        const date = new Date(timeStamp);
-        setDate(date.toLocaleDateString());
-      } catch (error) {
-        console.log(error);
-        alert.error(error);
+    if (error) {
+      alert.error("Something went wrong");
+      console.log(error);
+    }
+    const timeOut = setTimeout(() => {
+      if (!isAuthenticated) {
+        alert.error("Login to access this resource");
+        navigate(`/queryhub/login`);
       }
-    };
-    fetchUser();
-  }, [navigate, alert]);
+    }, 2000);
+    return () => clearTimeout(timeOut);
+  }, [isAuthenticated, loading, user, alert, navigate]);
   const handleLogout = () => {
-    window.open("http://localhost:8000/logout", "_self");
+    window.open("http://localhost:8000/auth/logout", "_self");
   };
   return (
     <div className="profile">
       {user ? (
-        <div style={{ textAlign: "center" }}>
-          <h2>Welcome {user.name}</h2>
-          <img
-            src={user && user.image}
-            alt="Profile"
-            style={{ alignContent: "center" }}
-          />
-          {user.about ? (
-            <>
-              <p>About:{user.about}</p>
-            </>
-          ) : (
-            <></>
-          )}
-          <p>
-            {user.tags ? (
+        <>
+          <div style={{ textAlign: "center" }}>
+            <h2>Welcome {user.name}</h2>
+            <img
+              src={user.image}
+              alt="Profile"
+              style={{ alignContent: "center" }}
+            />
+            {user.phone ? (
               <>
-                <p>{user.tags}</p>
+                <p>Phone: {user.phone}</p>
               </>
             ) : (
               <></>
             )}
-          </p>
-          <p>Email: {user.email}</p>
-          <p>
-            Badge: <span className={`${user.badge}`}>{user.badge}</span>
-          </p>
-          <p>Date: {date}</p>
-          <button className="button" onClick={handleLogout}>
-            Logout
-          </button>
-          <br />
-          <br />
-          <button className="button" onClick={updateNavigate}>
-            UPDATE PROFILE
-          </button>
-        </div>
-      ) : (
-        <>
-          <Loader />
+            {user.about ? (
+              <>
+                <p>About:{user.about}</p>
+              </>
+            ) : (
+              <></>
+            )}
+            <p>
+              {user.tags ? (
+                <>
+                  <p>{user.tags}</p>
+                </>
+              ) : (
+                <></>
+              )}
+            </p>
+            <p>Email: {user.email}</p>
+            <p>
+              Badge: <span className={`${user.badge}`}>{user.badge}</span>
+            </p>
+            <p>Date: {user.joinedOn}</p>
+            <button className="button" onClick={handleLogout}>
+              Logout
+            </button>
+            <br />
+            <br />
+            <button className="button" onClick={updateNavigate}>
+              UPDATE PROFILE
+            </button>
+          </div>
         </>
+      ) : (
+        <Loader />
       )}
     </div>
   );

@@ -33,7 +33,7 @@ const Login = () => {
       alert.success("Login Done!");
       navigate(`/queryhub/profile`);
     }
-  }, [dispatch, error, isAuthenticated, alert]);
+  }, [error, isAuthenticated, alert]);
   return (
     <>
       {loading ? (

@@ -1,43 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import { useSelector, useDispatch } from "react-redux";
 import { FaBars } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
 import "./Navbar.css";
-import { useAlert } from "react-alert";
-import axios from "axios";
-import Cookies from "js-cookie";
+import { useSelector } from "react-redux";
 const Navbar = () => {
   const navigate = useNavigate();
-  const User = null;
-  const alert = useAlert();
   const [image, setImage] = useState("");
   const Logo =
     "https://p7.hiclipart.com/preview/911/267/631/web-development-computer-icons-website.jpg";
-  const searchImage =
-    "https://raw.githubusercontent.com/devgoel2004/StackOverFlow/63b2210d972557dd7f203701122e1d0805f1abd4/client/src/assests/search.svg";
   const [handler, setHandler] = useState(false);
   const handleSlideIn = () => {
     setHandler(!handler);
   };
-  // const handleLogout = () => {
-  //   window.open("http://localhost:8000/auth/logout", "_self");
-  // };
-  // const fetchUser = async () => {
-  //   try {
-  //     const { data } = await axios.get("http://localhost:8000/auth/profile", {
-  //       withCredentials: true,
-  //     });
-  //     setImage(data.user.image);
-  //   } catch (error) {
-  //     alert.error(error);
-  //     navigate("/queryhub");
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchUser();
-  // }, []);
-  // console.log(image);
+  const { user, error, loading, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
+  useEffect(() => {
+    if (error) {
+      console.log(error);
+    }
+    if (user) {
+      setImage(user.image);
+    }
+  }, [loading, isAuthenticated, error]);
+  const handleLogout = () => {
+    window.open("http://localhost:8000/auth/logout", "_self");
+  };
   return (
     <>
       <nav className={`main-nav`}>
@@ -87,7 +76,7 @@ const Navbar = () => {
             </Link>
           </div>
           <div className={`navbar-2`}>
-            {image === "" ? (
+            {isAuthenticated === false ? (
               <Link to="/queryhub/login" className="nav-item nav-links ">
                 Log in
               </Link>

@@ -29,7 +29,7 @@ router.get(
     res.redirect("http://localhost:5173/queryhub/profile");
   }
 );
-router.get("/alluser", async (req, res) => {
+router.get("/allusers", async (req, res) => {
   const users = await User.find();
   res.send(users);
 });
@@ -39,28 +39,33 @@ router.get("/profile", async (req, res) => {
     const token = req.cookies.token;
     if (!token) {
       return res.status(401).json({
+        success: false,
         message: "Unauthorized",
       });
     }
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     if (!decoded) {
       return res.status(401).json({
+        success: false,
         message: "Not verified",
       });
     }
-    const user = await User.findOne({ email: decoded.email });
+    const user = await User.findOne({ _id: decoded.id });
+    // console.log(user);
     if (!user) {
       return res.status(404).json({
         message: "User not found",
+        success: false,
       });
     }
     res.status(200).json({
       user,
+      success: true,
     });
   } catch (error) {
     res.status(401).json({
       message: "Invalid token",
+      success: false,
     });
   }
 });
