@@ -55,7 +55,12 @@ export const questionsReducer = (state = { questions: [] }, action) => {
       return state;
   }
 };
-export const questionDetailsReducer = (state = { question: {} }, action) => {
+const intialState = {
+  question: {},
+  loading: true,
+  error: null,
+};
+export const questionDetailsReducer = (state = intialState, action) => {
   switch (action.type) {
     case GET_QUESTIONS_DETAILS_REQUEST:
       return {

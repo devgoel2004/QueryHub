@@ -43,26 +43,23 @@ export const createQuestion = (questionData) => async (dispatch) => {
       questionData,
       config
     );
-    console.log(data);
     dispatch({
       type: ASK_QUESTION_SUCCESS,
       payload: data,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: ASK_QUESTION_FAIL,
       payload: error.response.data.message,
     });
   }
 };
-export const getQuestion = async (questionId) => {
+export const getQuestion = (questionId) => async (dispatch) => {
   console.log("hello world");
   try {
-    console.log(questionId);
-    // dispatch({
-    //   type: GET_QUESTIONS_DETAILS_REQUEST,
-    // });
+    dispatch({
+      type: GET_QUESTIONS_DETAILS_REQUEST,
+    });
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -74,15 +71,14 @@ export const getQuestion = async (questionId) => {
       config
     );
     console.log(data);
-    // dispatch({
-    //   type: GET_QUESTIONS_DETAILS_SUCCESS,
-    //   payload: data,
-    // });
+    dispatch({
+      type: GET_QUESTIONS_DETAILS_SUCCESS,
+      payload: data,
+    });
   } catch (error) {
-    console.log(error);
-    // dispatch({
-    //   type: GET_QUESTIONS_DETAILS_FAIL,
-    //   payload: error.response.data.message,
-    // });
+    dispatch({
+      type: GET_QUESTIONS_DETAILS_FAIL,
+      payload: error.response.data.message,
+    });
   }
 };

@@ -3,12 +3,14 @@ const Question = require("../models/questionModel");
 exports.askQuestion = async (req, res) => {
   try {
     const { questionTitle, questionBody, questionTags } = req.body;
-    const user = req.user._id;
+    const userId = req.user._id;
+    const userName = req.user.name;
     const postQuestion = new Question({
       questionBody,
       questionTitle,
       questionTags,
-      user,
+      user: userId,
+      userName,
     });
     if (!questionBody) {
       return res.status(401).json({
@@ -120,6 +122,7 @@ exports.voteQuestion = async (req, res) => {
       questionUpdate,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       error: error,
@@ -130,7 +133,6 @@ exports.voteQuestion = async (req, res) => {
 exports.getQuestion = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const question = await Question.findById(id);
     if (!question) {
       return res.status(404).json({
@@ -143,7 +145,7 @@ exports.getQuestion = async (req, res) => {
       question,
     });
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     return res.status(500).json({
       success: false,
       error,

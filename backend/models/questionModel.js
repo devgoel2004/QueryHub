@@ -29,6 +29,10 @@ const QuestionSchema = mongoose.Schema({
     ref: "User",
     required: true,
   },
+  userName: {
+    type: String,
+    required: true,
+  },
   postedOn: {
     type: Date,
     default: Date.now,
@@ -36,8 +40,12 @@ const QuestionSchema = mongoose.Schema({
   answer: [
     {
       answerBody: String,
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
       userAnswered: String,
-      userId: String,
       answeredOn: { type: Date, default: Date.now },
     },
   ],

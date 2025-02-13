@@ -75,6 +75,7 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(email);
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -377,7 +378,7 @@ exports.getSingleUserDetails = async (req, res, next) => {
     return res.status(500).json({
       success: false,
       message: "Internal error",
-      error
+      error,
     });
   }
 };

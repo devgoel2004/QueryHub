@@ -1,67 +1,98 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { getQuestion } from "../../actions/questionActions";
 import { useDispatch, useSelector } from "react-redux";
+import "./QuestionDetails.css";
+import Loader from "../Loader/Loader";
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 const QuestionDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const x = useSelector((state) => state.questionDetails);
-  console.log(x);
+  const { question, loading, error } = useSelector(
+    (state) => state.questionDetails
+  );
+  console.log(loading);
   const alert = useAlert();
   const [value, setValue] = useState(0);
   const [count, setCount] = useState(0);
-  const [userId, setUserId] = useState("");
-  // console.log(id);
-  // const getQuestionDetails = async () => {
-  //   try {
-  //     const { data } = await axios.get(`http://localhost:8000/question/${id}`);
-  //     console.log(data);
-  //     if (data.success === false) {
-  //       alert.error(data.message);
-  //     }
-  //     setUserId(data.question.user);
-  //     console.log("userId", userId);
-  //     setQuestion(data.question);
-  //     // getUserData(data.question.user);
-  //   } catch (error) {
-  //     alert.error("Something is wrong");
-  //     console.log(error.response.data.success);
-  //   }
-  // };
-  // const getUserData = async (userId) => {
-  //   console.log(userId);
-  //   const value = await axios.get(`http://localhost:8000/user/${userId}`);
-  //   console.log(value);
-  //   // try {
-  //   //   console.log(userId);
-  //   //   const { data } = await axios.get(`http://localhost:8000/user/${id}`);
-  //   //   console.log(data);
-  //   // } catch (error) {}
-  // };
-  // console.log(id);
+  const [answerBody, setAnswerBody] = useState("");
   useEffect(() => {
-    console.log(id);
-    getQuestion(id);
-  }, [id]);
+    if (error) {
+      console.log(error);
+      alert.success(error);
+    }
+    dispatch(getQuestion(id));
+  }, [dispatch, id]);
   return (
     <>
-      {/* <div>
-        <h1>Question Detail</h1>
-        <h2>{id}</h2>
-        <h2>{question && question.questionTitle}</h2>
-        <p>{question && question.questionBody}</p>
-        <p>
-          {question &&
-            question.questionTags.map((tag) => (
-              <ul>
-                <li>{tag}</li>
+      {loading ? (
+        <>
+          <Loader />
+        </>
+      ) : (
+        <>
+          <div className="question-container">
+            <h1 className="question-title">
+              {question && question.question.questionTitle}
+            </h1>
+            <p className="question-body">
+              {question && question.question.questionBody}
+            </p>
+            {/* Date & User Info */}
+            <div className="question-meta">
+              <p>
+                Date:{" "}
+                {question &&
+                  new Date(question.question.postedOn).toLocaleDateString(
+                    "en-US",
+                    { year: "numeric", month: "long", day: "numeric" }
+                  )}
+              </p>
+              <p>User ID: {question && question.question.user}</p>
+            </div>
+            {/* Tags */}
+            <div className="question-tags">
+              {question &&
+                question.question.questionTags.map((tag, index) => (
+                  <span key={index} className="tag">
+                    #{tag}
+                  </span>
+                ))}
+            </div>
+            {/* Answers Section */}
+            <h3 className="answers-title">
+              {question && question.question.answer.length} Answers
+            </h3>
+            <ul>
+            {question &&
+              question.question.answer.map((ans) => (
+                <li>
+                  <p>{ans.answerBody}</p>
+                </li>
+              ))}
               </ul>
-            ))}
-        </p>
-      </div> */}
+            {question.question.upVote - question.question.downVote} Vote
+            <button className="arrow up">
+              <FaArrowUp />
+            </button>
+            <button className="arrow down">
+              <FaArrowDown />
+            </button>
+            <br />
+            {/* <form action="">
+            <textarea
+              className="input"
+              type="text"
+              onChange={(e) => setAnswerBody(e.target.value)}
+            />
+            <img src="" alt="" />
+          </form> */}
+            <button className="button">Post Answer</button>
+          </div>
+        </>
+      )}
     </>
   );
 };
