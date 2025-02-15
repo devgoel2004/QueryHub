@@ -54,6 +54,7 @@
   padding: 0;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-around;
 }
 
 .list-item {
@@ -63,6 +64,7 @@
   border-radius: 6px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: 0.3s;
+  min-width: 40vw;
 }
 
 .list-item:hover {
@@ -111,4 +113,11 @@
 }
 .question-container p {
   font-weight: 400;
+}
+
+@media (max-width: 767px) {
+  .list-item {
+    min-width: 80vw;
+    max-width: 90vw;
+  }
 }

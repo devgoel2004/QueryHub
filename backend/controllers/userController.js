@@ -290,8 +290,8 @@ exports.updateProfile = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      success: "false",
-      message: error,
+      success: false,
+      message: "Internal Server error",
     });
   }
 };
@@ -316,6 +316,7 @@ exports.getAllUser = async (req, res, next) => {
 //Get single user
 exports.getSingleUser = async (req, res, next) => {
   try {
+    console.log(req.user._id);
     const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(400).json({
@@ -331,7 +332,8 @@ exports.getSingleUser = async (req, res, next) => {
     console.log(error);
     return res.status(500).json({
       success: "false",
-      message: error,
+      message: "error",
+      error,
     });
   }
 };

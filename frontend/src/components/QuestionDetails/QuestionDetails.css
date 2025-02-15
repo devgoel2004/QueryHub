@@ -15,7 +15,14 @@
   color: #333;
   margin-bottom: 10px;
 }
-
+.delete-button {
+  border: none;
+  background-color: white;
+  padding-left: 15px;
+  height: 65px;
+  color: tomato;
+  cursor: pointer;
+}
 /* Body */
 .question-body {
   font-size: 18px;

@@ -3,7 +3,8 @@ import "./UpdateProfile.css";
 import { useAlert } from "react-alert";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { updatePassword } from "../../actions/userActions";
+import { clearErrors, updatePassword } from "../../actions/userActions";
+import Loader from "../Loader/Loader";
 const UpdatePassword = () => {
   const alert = useAlert();
   const navigate = useNavigate();
@@ -11,7 +12,9 @@ const UpdatePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { user, isAuthenticated, loading } = useSelector((state) => state.user);
+  const { user, isAuthenticated, loading, error } = useSelector(
+    (state) => state.user
+  );
   const updatePasswordHandler = (e) => {
     e.preventDefault();
     const userData = {
@@ -19,21 +22,31 @@ const UpdatePassword = () => {
       newPassword,
       confirmPassword,
     };
-    console.log("hello world");
-    console.log(newPassword);
     if (newPassword !== confirmPassword) {
       window.alert("New Password and update Password must be same");
     }
     dispatch(updatePassword(userData));
   };
   useEffect(() => {
-    if (!isAuthenticated) {
-      // alert.error("login to access this resources");
-      // navigate("/queryhub/login");
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
     }
-    console.log(user);
-  }, [isAuthenticated]);
-  return (
+    const timeOut = setTimeout(() => {
+      if (!isAuthenticated) {
+        alert.error("Login to access this resource");
+        navigate(`/queryhub/login`);
+      }
+    }, 2000);
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [isAuthenticated, alert, navigate, error]);
+  return loading ? (
+    <>
+      <Loader />
+    </>
+  ) : (
     <>
       <div className="update-password">
         <form action="" className="form" onSubmit={updatePasswordHandler}>

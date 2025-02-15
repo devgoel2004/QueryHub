@@ -4,8 +4,10 @@ import { FaBars } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
 import "./Navbar.css";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 const Navbar = () => {
   const navigate = useNavigate();
+  const alert = useAlert();
   const [image, setImage] = useState("");
   const Logo =
     "https://p7.hiclipart.com/preview/911/267/631/web-development-computer-icons-website.jpg";
@@ -18,12 +20,12 @@ const Navbar = () => {
   );
   useEffect(() => {
     if (error) {
-      console.log(error);
+      alert.error(error);
     }
     if (user) {
       setImage(user.image);
     }
-  }, [loading, isAuthenticated, error]);
+  }, [loading, isAuthenticated, error, user]);
   const handleLogout = () => {
     window.open("http://localhost:8000/auth/logout", "_self");
   };

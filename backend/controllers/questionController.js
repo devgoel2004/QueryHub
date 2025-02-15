@@ -3,6 +3,7 @@ const Question = require("../models/questionModel");
 exports.askQuestion = async (req, res) => {
   try {
     const { questionTitle, questionBody, questionTags } = req.body;
+
     const userId = req.user._id;
     const userName = req.user.name;
     const postQuestion = new Question({
@@ -12,16 +13,16 @@ exports.askQuestion = async (req, res) => {
       user: userId,
       userName,
     });
-    if (!questionBody) {
-      return res.status(401).json({
-        success: false,
-        message: "Question Body is required",
-      });
-    }
     if (!questionTitle) {
       return res.status(401).json({
         success: false,
         message: "Title is required",
+      });
+    }
+    if (!questionBody) {
+      return res.status(401).json({
+        success: false,
+        message: "Question Body is required",
       });
     }
     if (!questionTags) {
@@ -63,18 +64,20 @@ exports.getAllQuestions = async (req, res) => {
 //DELETE QUESTIONS
 exports.deleteQuestions = async (req, res) => {
   try {
-    const { questionId } = req.body;
-    const question = await Question.findById(questionId);
+    const { id } = req.params;
+    console.log(id);
+    const question = await Question.findById(id);
     if (!question) {
       return res.status(404).json({
         success: false,
         message: "Question not found",
       });
     }
-    const deleteQuestion = await Question.findByIdAndDelete(questionId);
+    const deleteQuestion = await Question.findByIdAndDelete(id);
     res.status(200).json({
       success: true,
-      message: "Question deleted successfull",
+      message: "Question deleted successfully",
+      deleteQuestion,
     });
   } catch (error) {
     console.log(error);
@@ -130,6 +133,33 @@ exports.voteQuestion = async (req, res) => {
   }
 };
 
+exports.updateQuestion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user._id;
+    const question = await Question.findById(id);
+    if (!question) {
+      return res.status(404).json({
+        success: false,
+        message: "No question found",
+      });
+    }
+    const user_id = question.user;
+    if (user_id !== userId) {
+      return res.status(401).json({
+        success: false,
+        essage: "",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "internal error",
+      error,
+    });
+  }
+};
 exports.getQuestion = async (req, res) => {
   try {
     const { id } = req.params;

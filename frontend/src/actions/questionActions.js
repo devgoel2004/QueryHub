@@ -26,6 +26,30 @@ import {
   VOTE_QUESTION_FAIL,
   CLEAR_ERRORS,
 } from "../constants/questionConstants";
+//GET QUESTIONS
+export const getQuestions = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_QUESTIONS_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    };
+    const { data } = await axios.get(`http://localhost:8000/question`, config);
+    dispatch({
+      type: GET_QUESTIONS_SUCCESS,
+      payload: data.questions,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_QUESTIONS_FAIL,
+      payload: error?.response?.data?.message || "Something went wrong",
+    });
+  }
+};
 //ASK QUESTION
 export const createQuestion = (questionData) => async (dispatch) => {
   try {
@@ -43,6 +67,8 @@ export const createQuestion = (questionData) => async (dispatch) => {
       questionData,
       config
     );
+    console.log(data);
+
     dispatch({
       type: ASK_QUESTION_SUCCESS,
       payload: data,
@@ -55,7 +81,6 @@ export const createQuestion = (questionData) => async (dispatch) => {
   }
 };
 export const getQuestion = (questionId) => async (dispatch) => {
-  console.log("hello world");
   try {
     dispatch({
       type: GET_QUESTIONS_DETAILS_REQUEST,
@@ -70,7 +95,6 @@ export const getQuestion = (questionId) => async (dispatch) => {
       `http://localhost:8000/question/${questionId}`,
       config
     );
-    console.log(data);
     dispatch({
       type: GET_QUESTIONS_DETAILS_SUCCESS,
       payload: data,
@@ -78,7 +102,88 @@ export const getQuestion = (questionId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GET_QUESTIONS_DETAILS_FAIL,
+      payload: error.response?.data?.message || "Something went wrong",
+    });
+  }
+};
+export const deleteQuestion = (questionId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DELETE_QUESTION_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    };
+    const { data } = await axios.delete(
+      `http://localhost:8000/question/${questionId}`,
+      config
+    );
+    dispatch({
+      type: DELETE_QUESTION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_QUESTION_FAIL,
       payload: error.response.data.message,
+    });
+  }
+};
+export const postAnswer = (answerBody, id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: POST_ANSWER_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    };
+    const { data } = await axios.put(
+      `http://localhost:8000/answer/post/${id}`,
+      { answerBody },
+      config
+    );
+    type({
+      type: POST_ANSWER_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: POST_ANSWER_FAIL,
+      payload: error.response,
+    });
+  }
+};
+
+export const deleteAnswer = (id, ansId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DELETE_ANSWER_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    };
+    const { data } = await axios.delete(
+      `http://localhost:8000/answer/delete/${id}?answerId=${ansId}`,
+      config
+    );
+    dispatch({
+      type: DELETE_ANSWER_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_ANSWER_FAIL,
+      payload: error.response,
     });
   }
 };

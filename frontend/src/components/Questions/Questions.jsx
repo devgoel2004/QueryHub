@@ -1,37 +1,37 @@
 import React, { useState, useEffect } from "react";
 import "./Question.css";
-import axios from "axios";
 import { FaArrowAltCircleUp } from "react-icons/fa";
 import { FaArrowCircleDown } from "react-icons/fa";
 import MetaData from "../MetaData/MetaData";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../Loader/Loader";
+import { getQuestions } from "../../actions/questionActions";
+import { useAlert } from "react-alert";
 const Questions = () => {
   const navigate = useNavigate();
-  const [questions, setQuestions] = useState([]);
+  const dispatch = useDispatch();
+  const alert = useAlert();
   const [value, setValue] = useState(0);
-  const [count, setCount] = useState(0);
-  const getQuestions = async () => {
-    try {
-      const { data } = await axios.get(`http://localhost:8000/question`);
-      setQuestions(data.questions);
-      setCount(data.questions.length);
-      console.log(data.questions);
-      console.log(questions[0].upVote - questions[0].downVote);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { loading, questions, error } = useSelector((state) => state.questions);
   const upVoteHandler = () => {
     setValue(1);
-    console.log(value);
   };
   const downVoteHandler = () => {
     setValue(-1);
   };
   useEffect(() => {
-    getQuestions();
-  }, []);
-  return (
+    if (error) {
+      alert.error(error);
+      navigate(`/queryhub`);
+    }
+    dispatch(getQuestions());
+  }, [dispatch, alert, error]);
+  return loading ? (
+    <>
+      <Loader />
+    </>
+  ) : (
     <>
       <MetaData title={"Questions"} />
       <div
@@ -85,7 +85,7 @@ const Questions = () => {
                     padding: "10px 5px",
                   }}>
                   {question.questionTags.map((tag) => (
-                    <li>{tag}</li>
+                    <li key={tag}>{tag}</li>
                   ))}
                 </ul>
                 <button className="button-tags" onClick={upVoteHandler}>
@@ -113,7 +113,7 @@ const Questions = () => {
                   {question.answer.length === 0 ? (
                     <>No </>
                   ) : (
-                    <>question.answer.length</>
+                    <>{question.answer.length} </>
                   )}
                   Answers
                 </p>

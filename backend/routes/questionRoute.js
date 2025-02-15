@@ -9,7 +9,6 @@ const { isAuthenticatedUser } = require("../middleware/authentication");
 const express = require("express");
 const router = express.Router();
 router.route("/").post(isAuthenticatedUser, askQuestion).get(getAllQuestions);
-
 router
   .route("/:id")
   .delete(isAuthenticatedUser, deleteQuestions)

@@ -2,21 +2,29 @@ import React, { useEffect, useState } from "react";
 import "./UpdateProfile.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateProfile } from "../../actions/userActions";
+import { clearErrors, updateProfile } from "../../actions/userActions";
 import { useAlert } from "react-alert";
-import { FaDirections } from "react-icons/fa";
+import Loader from "../Loader/Loader";
+import { MdAutoDelete } from "react-icons/md";
 const UpdateProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
-  const [phone, setPhone] = useState();
-  const [about, setAbout] = useState("");
+  const { user, isAuthenticated, loading, error } = useSelector(
+    (state) => state.user
+  );
+  const { isUpdated, error: profileError } = useSelector(
+    (state) => state.profile
+  );
+  const x = useSelector((state) => state.profile);
+  const [email, setEmail] = useState(user?.email);
+  const [name, setName] = useState(user?.name);
+  const [image, setImage] = useState(user?.image);
+  const [phone, setPhone] = useState(user?.phone);
+  const [about, setAbout] = useState(user?.about);
   const updateProfileSubmit = (e) => {
     e.preventDefault();
-    if (phone.length !== 10) {
+    if (String(phone).length !== 10) {
       alert.error("Phone number should be of 10");
       return;
     }
@@ -28,10 +36,10 @@ const UpdateProfile = () => {
       about,
     };
     dispatch(updateProfile(userData));
+    if (isUpdated) {
+      alert.success("Updated successfully");
+    }
   };
-  const { user, isAuthenticated, isloading, error } = useSelector(
-    (state) => state.user
-  );
 
   useEffect(() => {
     if (user) {
@@ -40,13 +48,31 @@ const UpdateProfile = () => {
       setAbout(user.about);
       setPhone(user.phone);
       setImage(user.image);
-      // setImage(user.image);
     }
-    if (!isAuthenticated) {
-      console.log("error");
+
+    const timeOut = setTimeout(() => {
+      if (!isAuthenticated) {
+        alert.error("Login to access this resource");
+        navigate(`/queryhub/login`);
+      }
+    }, 2000);
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
     }
-  }, [isAuthenticated, user]);
-  return (
+    if (x.error) {
+      alert.error(x.error);
+      dispatch(clearErrors());
+    }
+    return () => {
+      clearInterval(timeOut);
+    };
+  }, [isAuthenticated, user, error, alert, isUpdated, x.error]);
+  return loading ? (
+    <>
+      <Loader />
+    </>
+  ) : (
     <div
       className="update-profile"
       style={{
@@ -95,7 +121,7 @@ const UpdateProfile = () => {
           placeholder="About"
           onChange={(e) => e.target.value}
         />
-        <input type="submit" className="button" />
+        <input type="submit" className="button" value="UPDATE PROFILE" />
       </form>
       <button
         className="button"

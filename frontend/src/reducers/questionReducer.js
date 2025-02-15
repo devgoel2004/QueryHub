@@ -76,7 +76,7 @@ export const questionDetailsReducer = (state = intialState, action) => {
     case GET_QUESTIONS_DETAILS_FAIL:
       return {
         ...state,
-        loading: false,
+        loading: true,
         error: action.payload,
       };
     case CLEAR_ERRORS:

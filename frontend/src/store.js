@@ -25,6 +25,7 @@ const reducer = combineReducers({
   questionCrud: questionCrudReducer,
 });
 let initialState = {};
+
 const middleWare = [thunk];
 const store = createStore(
   reducer,

@@ -45,7 +45,7 @@ export const login = (email, password) => async (dispatch) => {
     console.log(error);
     dispatch({
       type: LOGIN_FAIL,
-      payload: error.response.data.message,
+      payload: error.response.data.message || "Something went wrong",
     });
   }
 };
@@ -69,7 +69,7 @@ export const register = (userData) => async (dispatch) => {
     console.log(error);
     dispatch({
       type: REGISTER_FAIL,
-      payload: error.response.data.message,
+      payload: error.response.data.message || "Something went wrong",
     });
   }
 };
@@ -91,7 +91,7 @@ export const loadUser = () => async (dispatch) => {
     console.log(error);
     dispatch({
       type: LOAD_USER_FAIL,
-      payload: error.response.data.message,
+      payload: error.response.data.message || "Something went wrong",
     });
   }
 };
@@ -110,7 +110,7 @@ export const logout = () => async (dispatch) => {
     console.log(error);
     dispatch({
       type: LOGOUT_FAIL,
-      payload: error.response,
+      payload: error.response?.data?.message || "Something went wrong",
     });
   }
 };
@@ -126,7 +126,6 @@ export const updateProfile = (userData) => async (dispatch) => {
       },
       withCredentials: true,
     };
-    console.log(userData);
     const { data } = await axios.put(`${url}/user/me/update`, userData, config);
     console.log(data);
     dispatch({
@@ -137,7 +136,7 @@ export const updateProfile = (userData) => async (dispatch) => {
     console.log(error);
     dispatch({
       type: UPDATE_PROFILE_FAIL,
-      payload: error.message,
+      payload: error?.response?.data?.message || "Something went wrong",
     });
   }
 };
@@ -157,7 +156,7 @@ export const updatePassword = (password) => async (dispatch) => {
       password,
       config
     );
-    console.log(data)
+    console.log(data);
     dispatch({
       type: UPDATE_PASSWORD_SUCCESS,
       payload: data.success,
@@ -166,7 +165,7 @@ export const updatePassword = (password) => async (dispatch) => {
     console.log(error);
     dispatch({
       type: UPDATE_PASSWORD_FAIL,
-      payload: error.response.data.message,
+      payload: error.response.data.message || "Something went wrong",
     });
   }
 };
@@ -193,9 +192,10 @@ export const forgotPasswordAction = (email) => async (dispatch) => {
       payload: data.message,
     });
   } catch (error) {
+    console.log(error);
     dispatch({
       type: FORGOT_PASSWORD_FAIL,
-      payload: error.response.data.message,
+      payload: error.response.data.message || "Something went wrong",
     });
   }
 };
@@ -222,9 +222,10 @@ export const resetPasswordAction = (token, password) => async (dispatch) => {
       payload: data.success,
     });
   } catch (error) {
+    console.log(error);
     dispatch({
       type: RESET_PASSWORD_FAIL,
-      payload: error.response.data.message,
+      payload: error.response.data.message || "Something went wrong",
     });
   }
 };
@@ -250,7 +251,7 @@ export const getUserDetails = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_DETAILS_FAIL,
-      payload: error.response.data.message,
+      payload: error.response.data.message || "Something went wrong",
     });
   }
 };

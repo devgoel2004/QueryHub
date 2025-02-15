@@ -48,7 +48,7 @@ exports.postAnswer = async (req, res, next) => {
 exports.deleteAnswer = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { answerId } = req.body;
+    const { answerId } = req.query;
     const userId = req.user._id;
     const question = await Question.findById(id);
     if (!question) {

@@ -19,16 +19,8 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [imagePreview, setImagePreview] = useState("");
-  const [user, setUser] = useState({
-    email: "",
-    name: "",
-    image: "",
-    password: "",
-  });
   const signupSubmit = (e) => {
     e.preventDefault();
-    console.log("hello world");
-    // console.log(user);
     const myForm = new FormData();
     myForm.set("name", name);
     myForm.set("email", email);
@@ -41,12 +33,12 @@ const Signup = () => {
   };
   useEffect(() => {
     if (error) {
-      console.log(error);
+      alert.error(error);
       dispatch(clearErrors());
     }
     if (isAuthenticated) {
       alert.success("Already Logged In");
-      navigate(`/queryhub/login`);
+      navigate(`/queryhub/profile`);
     }
   }, [dispatch, error, alert, isAuthenticated]);
   return (

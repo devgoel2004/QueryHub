@@ -1,0 +1,14 @@
+.postQuestion {
+  min-height: 100vh;
+  margin-top: 50px;
+}
+.Add-button {
+  height: 55px;
+  width: 11vw;
+  border: 1px solid;
+  border-radius: 10px;
+  /* cursor: pointer; */
+}
+.box {
+  width: 85%;
+}

@@ -122,6 +122,7 @@ export const profileReducer = (state = {}, action) => {
     case UPDATE_PROFILE_SUCCESS:
     case UPDATE_PASSWORD_SUCCESS:
     case UPDATE_USER_SUCCESS:
+      console.log(action.payload);
       return {
         ...state,
         loading: false,
@@ -148,7 +149,7 @@ export const profileReducer = (state = {}, action) => {
     case UPDATE_USER_RESET:
       return {
         ...state,
-        isUpdated: false,
+        // isUpdated: action.payload,
       };
     case DELETE_USER_RESET:
       return {
@@ -165,30 +166,27 @@ export const profileReducer = (state = {}, action) => {
   }
 };
 
+//admin
 export const updateReducer = (state = { user: {} }, action) => {
   switch (action.type) {
-    case UPDATE_PASSWORD_REQUEST:
-    case UPDATE_PROFILE_REQUEST:
+    case UPDATE_USER_REQUEST:
       return {
         ...state,
         loading: true,
       };
-    case UPDATE_PROFILE_SUCCESS:
-    case UPDATE_PASSWORD_SUCCESS:
+    case UPDATE_USER_SUCCESS:
       return {
         ...state,
         loading: false,
         isUpdated: action.payload,
       };
-    case UPDATE_PROFILE_FAIL:
-    case UPDATE_PASSWORD_FAIL:
+    case UPDATE_USER_FAIL:
       return {
         ...state,
         loading: false,
         error: action.payload,
       };
-    case UPDATE_PROFILE_RESET:
-    case UPDATE_PASSWORD_RESET:
+    case UPDATE_USER_RESET:
       return {
         ...state,
         isUpdated: false,
