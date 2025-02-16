@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Question.css";
-import { FaArrowAltCircleUp } from "react-icons/fa";
+import { FaAffiliatetheme, FaArrowAltCircleUp } from "react-icons/fa";
 import { FaArrowCircleDown } from "react-icons/fa";
 import MetaData from "../MetaData/MetaData";
 import { useNavigate } from "react-router-dom";
@@ -8,25 +8,47 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Loader/Loader";
 import { getQuestions } from "../../actions/questionActions";
 import { useAlert } from "react-alert";
+import axios from "axios";
 const Questions = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
   const [value, setValue] = useState(0);
-  const { loading, questions, error } = useSelector((state) => state.questions);
+  const [search, setSearch] = useState("");
+  const [tag, setTag] = useState("");
+  const [sortBy, setSortBy] = useState("createdAt");
+  const [order, setOrder] = useState("desc");
+  const [page, setPage] = useState(1);
+  const [tags, setTags] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const { loading, questions, error, totalPages, totalQuestions } = useSelector(
+    (state) => state.questions
+  );
   const upVoteHandler = () => {
     setValue(1);
   };
   const downVoteHandler = () => {
     setValue(-1);
   };
+  const getTags = async () => {
+    try {
+      const { data } = await axios.get(`http://localhost:8000/tags`);
+      setTags(data.tags);
+    } catch (error) {
+      alert.error(error.response.data.message || "Something went wrong");
+    }
+  };
+  const searchHandler = () => {
+    setSearchValue(search);
+  };
   useEffect(() => {
     if (error) {
       alert.error(error);
-      navigate(`/queryhub`);
+    
     }
-    dispatch(getQuestions());
-  }, [dispatch, alert, error]);
+    dispatch(getQuestions(searchValue, tag, sortBy, order, page));
+    getTags();
+  }, [dispatch, alert, error, searchValue, tag, sortBy, order, page]);
   return loading ? (
     <>
       <Loader />
@@ -62,12 +84,36 @@ const Questions = () => {
             fontWeight: "400",
             paddingLeft: "20px",
           }}>
-          {questions.length} questions
+          {totalQuestions} questions
         </p>
         <div className="filter">
-          <span>Newest</span>
-          <span>Vote</span>
-          <span>Answer</span>
+          <input
+            type="text"
+            placeholder="Search questions..."
+            value={search}
+            className="input"
+            style={{
+              width: "40vw",
+              backgroundColor: "white",
+              border: "1px solid black",
+            }}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button onClick={searchHandler}>Search</button>
+          <select value={tag} onChange={(e) => setTag(e.target.value)}>
+            <option value="">All Tags</option>
+            {tags.map((tag) => (
+              <option value={tag}>{tag}</option>
+            ))}
+          </select>
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+            <option value="createdAt">Date</option>
+            <option value="Vote">Votes</option>
+          </select>
+          <select value={order} onChange={(e) => setOrder(e.target.value)}>
+            <option value="desc">Descending</option>
+            <option value="asc">Ascending</option>
+          </select>
         </div>
         <div
           style={{
@@ -116,6 +162,16 @@ const Questions = () => {
                     <>{question.answer.length} </>
                   )}
                   Answers
+                </p>
+                <p onClick={() => navigate(`/queryhub/user/${question.user}`)}>
+                  User:{" "}
+                  <span
+                    style={{
+                      color: "#007bff",
+                    }}>
+                    {" "}
+                    {question.userName}
+                  </span>
                 </p>
                 <button
                   style={{

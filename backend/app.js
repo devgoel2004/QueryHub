@@ -9,6 +9,7 @@ const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const questionRoute = require("./routes/questionRoute");
 const answerRoute = require("./routes/answerRoute");
+const tagRoute = require("./routes/tagRoute");
 const app = express();
 const mongoose = require("mongoose");
 require("dotenv").config();
@@ -48,6 +49,7 @@ app.use("/auth", authRoute); // Google auth route
 app.use("/user", userRoute);
 app.use("/question", questionRoute);
 app.use(`/answer`, answerRoute);
+app.use(`/tags`, tagRoute);
 app.get("/", (req, res) => {
   res.send("Server is working fine");
 });

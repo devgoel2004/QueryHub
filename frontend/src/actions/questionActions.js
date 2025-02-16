@@ -27,29 +27,36 @@ import {
   CLEAR_ERRORS,
 } from "../constants/questionConstants";
 //GET QUESTIONS
-export const getQuestions = () => async (dispatch) => {
-  try {
-    dispatch({
-      type: GET_QUESTIONS_REQUEST,
-    });
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    };
-    const { data } = await axios.get(`http://localhost:8000/question`, config);
-    dispatch({
-      type: GET_QUESTIONS_SUCCESS,
-      payload: data.questions,
-    });
-  } catch (error) {
-    dispatch({
-      type: GET_QUESTIONS_FAIL,
-      payload: error?.response?.data?.message || "Something went wrong",
-    });
-  }
-};
+export const getQuestions =
+  (search = "", tag = "", sortBy = "createdAt", order = "desc", page = 1) =>
+  async (dispatch) => {
+    console.log(search);
+    try {
+      dispatch({
+        type: GET_QUESTIONS_REQUEST,
+      });
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      };
+      const { data } = await axios.get(
+        `http://localhost:8000/question`,
+        { params: { search, tag, sortBy, order, page } },
+        config
+      );
+      dispatch({
+        type: GET_QUESTIONS_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_QUESTIONS_FAIL,
+        payload: error?.response?.data?.message || "Something went wrong",
+      });
+    }
+  };
 //ASK QUESTION
 export const createQuestion = (questionData) => async (dispatch) => {
   try {

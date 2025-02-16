@@ -27,18 +27,24 @@ import {
   VOTE_QUESTION_FAIL,
   CLEAR_ERRORS,
 } from "../constants/questionConstants";
-export const questionsReducer = (state = { questions: [] }, action) => {
+export const questionsReducer = (
+  state = { questions: [], totalPages: 1, totalQuestions: 0 },
+  action
+) => {
   switch (action.type) {
     case GET_QUESTIONS_REQUEST:
       return {
         ...state,
         loading: true,
+        questions: [],
       };
     case GET_QUESTIONS_SUCCESS:
       return {
         state,
         loading: false,
-        questions: action.payload,
+        questions: action.payload.questions,
+        totalPages: action.payload.totalPages,
+        totalQuestions: action.payload.totalQuestions,
       };
     case GET_QUESTIONS_FAIL:
       return {

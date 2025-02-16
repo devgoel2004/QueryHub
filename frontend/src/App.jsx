@@ -15,6 +15,7 @@ import QuestionDetails from "./components/QuestionDetails/QuestionDetails";
 import store from "./store";
 import { loadUser } from "./actions/userActions";
 import AskQuestion from "./components/AskQuestion/AskQuestion";
+import UserDetails from "./components/UserDetails/UserDetails";
 function App() {
   useEffect(() => {
     store.dispatch(loadUser());
@@ -53,6 +54,7 @@ function App() {
           element={<AskQuestion />}
         />
         <Route path="*" element={<Error></Error>} />
+        <Route exact path={`queryhub/user/:id`} element={<UserDetails />} />
       </Routes>
     </>
   );

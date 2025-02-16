@@ -3,8 +3,6 @@ const User = require("../models/userModel");
 exports.postAnswer = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log(id);
-    // console.log(req.user);
     const userId = req.user._id;
     const userAnswered = req.user.name;
     if (!userId || !userAnswered) {
@@ -36,7 +34,6 @@ exports.postAnswer = async (req, res, next) => {
       question,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       success: false,
       error,
@@ -81,7 +78,6 @@ exports.deleteAnswer = async (req, res, next) => {
       deletedAnswer,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Internal error",

@@ -38,7 +38,6 @@ exports.askQuestion = async (req, res) => {
       question,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       success: false,
       error,
@@ -48,16 +47,40 @@ exports.askQuestion = async (req, res) => {
 //GET ALL QUESTIONS
 exports.getAllQuestions = async (req, res) => {
   try {
-    const questions = await Question.find();
+    let { page, limit, search, tag, sortBy, order } = req.query;
+    page = parseInt(page) | 1;
+    limit = parseInt(limit) || 10;
+    let filter = {};
+    if (search && search.trim() !== "") {
+      const searchRegex = new RegExp(search, "i");
+      filter.$text = { $search: search };
+    }
+    if (tag) {
+      filter.questionTags = tag;
+    }
+    const sortField = sortBy || "createdAt";
+    const sortOrder = order === "asc" ? 1 : -1;
+    const questions = await Question.find(filter)
+      .sort({
+        [sortField]: sortOrder,
+      })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean();
+    const totalCount = await Question.countDocuments(filter);
+
     res.status(200).json({
       success: true,
       questions,
+      totalPages: Math.ceil(totalCount / limit),
+      currentPage: page,
+      totalQuestions: totalCount,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       success: false,
       error: error,
+      message: "Internal Server Error",
     });
   }
 };
@@ -65,7 +88,6 @@ exports.getAllQuestions = async (req, res) => {
 exports.deleteQuestions = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const question = await Question.findById(id);
     if (!question) {
       return res.status(404).json({
@@ -80,10 +102,10 @@ exports.deleteQuestions = async (req, res) => {
       deleteQuestion,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       success: false,
       error: error,
+      message: "Internal Server Error",
     });
   }
 };
@@ -125,7 +147,6 @@ exports.voteQuestion = async (req, res) => {
       questionUpdate,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       success: false,
       error: error,
@@ -133,6 +154,7 @@ exports.voteQuestion = async (req, res) => {
   }
 };
 
+//UPDATE QUESTION
 exports.updateQuestion = async (req, res) => {
   try {
     const { id } = req.params;
@@ -148,11 +170,10 @@ exports.updateQuestion = async (req, res) => {
     if (user_id !== userId) {
       return res.status(401).json({
         success: false,
-        essage: "",
+        message: "Only user who created can update",
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       success: false,
       message: "internal error",
@@ -160,6 +181,8 @@ exports.updateQuestion = async (req, res) => {
     });
   }
 };
+
+//GET SINGLE QUESTION
 exports.getQuestion = async (req, res) => {
   try {
     const { id } = req.params;
@@ -175,11 +198,10 @@ exports.getQuestion = async (req, res) => {
       question,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       success: false,
       error,
-      message: "Something went wrong",
+      message: "Internal Server Error",
     });
   }
 };

@@ -15,7 +15,6 @@ exports.registerUser = async (req, res) => {
     // });
     const { name, email, password } = req.body;
     const findUser = await User.findOne({ email: email });
-    // console.log(findUser);
     if (findUser) {
       return res.status(401).json({
         message: "user exists",
@@ -63,10 +62,10 @@ exports.registerUser = async (req, res) => {
       message: "User registered successfully",
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
-      success: "false",
-      message: error,
+      success: false,
+      message: "Internal Server Error",
+      error,
     });
   }
 };
@@ -75,7 +74,6 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(email);
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -98,16 +96,16 @@ exports.loginUser = async (req, res) => {
     }
     sendToken(user, 200, res);
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
-      success: "false",
-      message: error,
+      success: false,
+      message: "Internal server error",
+      error,
     });
   }
 };
 
 //Logout User
-exports.logoutUser = async (req, res, next) => {
+exports.logoutUser = async (req, res) => {
   try {
     res.cookie("token", null, {
       expires: new Date(Date.now()),
@@ -119,16 +117,16 @@ exports.logoutUser = async (req, res, next) => {
       message: "Logout Successfully",
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
-      success: "false",
-      message: error,
+      success: false,
+      message: "Internal Server Error",
+      error,
     });
   }
 };
 
 //forgot password
-exports.forgotPassword = async (req, res, next) => {
+exports.forgotPassword = async (req, res) => {
   try {
     const user = await User.findOne({
       email: req.body.email,
@@ -156,26 +154,26 @@ exports.forgotPassword = async (req, res, next) => {
         message: `Email send to ${user.email} successfull. Kindly check your span folder`,
       });
     } catch (error) {
-      console.log(error);
       user.resetPasswordToken = undefined;
       user.resetPasswordExpire = undefined;
       await user.save();
       return res.status(500).json({
         success: false,
-        message: error,
+        message: "Internal Server Error",
+        error,
       });
     }
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
-      success: "false",
-      message: error,
+      success: false,
+      message: "Internal Server Error",
+      error,
     });
   }
 };
 
 //Reset Password
-exports.resetPassword = async (req, res, next) => {
+exports.resetPassword = async (req, res) => {
   try {
     const resetPasswordToken = crypto
       .createHash("sha256")
@@ -202,16 +200,16 @@ exports.resetPassword = async (req, res, next) => {
     await user.save();
     sendToken(user, 200, res);
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
-      success: "false",
-      message: error,
+      success: false,
+      message: "Internal Server Error",
+      error,
     });
   }
 };
 
 //get user details
-exports.getUserDetails = async (req, res, next) => {
+exports.getUserDetails = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     res.status(200).json({
@@ -219,16 +217,16 @@ exports.getUserDetails = async (req, res, next) => {
       user,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
-      success: "false",
-      message: error,
+      success: false,
+      message: "Internal Server Error",
+      error,
     });
   }
 };
 
 //update user password
-exports.updatePassword = async (req, res, next) => {
+exports.updatePassword = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select("+password");
     const isPasswordMatch = await user.comparePassword(req.body.oldPassword);
@@ -238,7 +236,6 @@ exports.updatePassword = async (req, res, next) => {
         message: "Old password does not matched",
       });
     }
-    console.log(req.body.newPassword);
     if (req.body.newPassword !== req.body.confirmPassword) {
       return res.status(400).json({
         success: false,
@@ -249,20 +246,19 @@ exports.updatePassword = async (req, res, next) => {
     await user.save();
     sendToken(user, 200, res);
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
-      success: "false",
-      message: error,
+      success: false,
+      message: "Internal Server Error",
+      error,
     });
   }
 };
 
 //update user profile
-exports.updateProfile = async (req, res, next) => {
+exports.updateProfile = async (req, res) => {
   try {
-    console.log(req.user._id);
     const { name } = req.body;
-    console.log(name);
+
     const newUserData = {
       name: req.body.name,
       email: req.body.email,
@@ -270,8 +266,6 @@ exports.updateProfile = async (req, res, next) => {
       tags: req.body.tags,
       phone: req.body.phone,
     };
-    // console.log(phone);
-    console.log(newUserData);
     // if (req.body.image) {
     //   const user = await User.findById(req.user.id);
     //   const myCloud = await cloudinary.v2.uploader.upload(req.body.image, {
@@ -288,16 +282,16 @@ exports.updateProfile = async (req, res, next) => {
       message: "Profile updated",
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Internal Server error",
+      error,
     });
   }
 };
 
 //get all users (admin)
-exports.getAllUser = async (req, res, next) => {
+exports.getAllUser = async (req, res) => {
   try {
     const user = await User.find();
     res.status(200).json({
@@ -305,18 +299,17 @@ exports.getAllUser = async (req, res, next) => {
       user,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
-      success: "false",
-      message: error,
+      success: false,
+      message: "Internal Server Error",
+      error,
     });
   }
 };
 
 //Get single user
-exports.getSingleUser = async (req, res, next) => {
+exports.getSingleUser = async (req, res) => {
   try {
-    console.log(req.user._id);
     const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(400).json({
@@ -329,17 +322,16 @@ exports.getSingleUser = async (req, res, next) => {
       user,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
-      success: "false",
-      message: "error",
+      success: false,
+      message: "Internal Server Error",
       error,
     });
   }
 };
 
 //Delete user -- Admin
-exports.deleteUser = async (req, res, next) => {
+exports.deleteUser = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
@@ -353,16 +345,16 @@ exports.deleteUser = async (req, res, next) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
-      success: "false",
-      message: error,
+      success: false,
+      message: "Internal Server error",
+      error,
     });
   }
 };
 
 //GET SINGLE USER DETAILS
-exports.getSingleUserDetails = async (req, res, next) => {
+exports.getSingleUserDetails = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);

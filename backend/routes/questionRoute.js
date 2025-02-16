@@ -4,6 +4,7 @@ const {
   deleteQuestions,
   voteQuestion,
   getQuestion,
+  getTags,
 } = require("../controllers/questionController");
 const { isAuthenticatedUser } = require("../middleware/authentication");
 const express = require("express");

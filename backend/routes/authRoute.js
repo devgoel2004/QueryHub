@@ -51,7 +51,7 @@ router.get("/profile", async (req, res) => {
       });
     }
     const user = await User.findOne({ _id: decoded.id });
-    // console.log(user);
+
     if (!user) {
       return res.status(404).json({
         message: "User not found",

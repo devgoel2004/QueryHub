@@ -12,12 +12,15 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
   UPDATE_PROFILE_REQUEST,
+  USER_DETAILS_FAIL,
   UPDATE_PROFILE_RESET,
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_FAIL,
   UPDATE_PASSWORD_REQUEST,
   UPDATE_PASSWORD_SUCCESS,
   UPDATE_PASSWORD_FAIL,
+  USER_DETAILS_REQUEST,
+  USER_DETAILS_SUCCESS,
 } from "../constants/userConstants";
 import axios from "axios";
 const url = "http://localhost:8000";
@@ -42,10 +45,9 @@ export const login = (email, password) => async (dispatch) => {
       payload: data,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: LOGIN_FAIL,
-      payload: error.response.data.message || "Something went wrong",
+      payload: error?.response?.data?.message || "Something went wrong",
     });
   }
 };
@@ -66,10 +68,9 @@ export const register = (userData) => async (dispatch) => {
       payload: data.user,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: REGISTER_FAIL,
-      payload: error.response.data.message || "Something went wrong",
+      payload: error?.response?.data?.message || "Something went wrong",
     });
   }
 };
@@ -88,10 +89,9 @@ export const loadUser = () => async (dispatch) => {
       payload: data.user,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: LOAD_USER_FAIL,
-      payload: error.response.data.message || "Something went wrong",
+      payload: error?.response?.data?.message || "Something went wrong",
     });
   }
 };
@@ -107,10 +107,9 @@ export const logout = () => async (dispatch) => {
       payload: error.message,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: LOGOUT_FAIL,
-      payload: error.response?.data?.message || "Something went wrong",
+      payload: error?.response?.data?.message || "Something went wrong",
     });
   }
 };
@@ -127,13 +126,12 @@ export const updateProfile = (userData) => async (dispatch) => {
       withCredentials: true,
     };
     const { data } = await axios.put(`${url}/user/me/update`, userData, config);
-    console.log(data);
+    
     dispatch({
       type: UPDATE_PROFILE_SUCCESS,
       payload: data.success,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: UPDATE_PROFILE_FAIL,
       payload: error?.response?.data?.message || "Something went wrong",
@@ -156,16 +154,14 @@ export const updatePassword = (password) => async (dispatch) => {
       password,
       config
     );
-    console.log(data);
     dispatch({
       type: UPDATE_PASSWORD_SUCCESS,
       payload: data.success,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: UPDATE_PASSWORD_FAIL,
-      payload: error.response.data.message || "Something went wrong",
+      payload: error?.response?.data?.message || "Something went wrong",
     });
   }
 };
@@ -192,10 +188,9 @@ export const forgotPasswordAction = (email) => async (dispatch) => {
       payload: data.message,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: FORGOT_PASSWORD_FAIL,
-      payload: error.response.data.message || "Something went wrong",
+      payload: error?.response?.data?.message || "Something went wrong",
     });
   }
 };
@@ -222,10 +217,9 @@ export const resetPasswordAction = (token, password) => async (dispatch) => {
       payload: data.success,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: RESET_PASSWORD_FAIL,
-      payload: error.response.data.message || "Something went wrong",
+      payload: error?.response?.data?.message || "Something went wrong",
     });
   }
 };
@@ -241,17 +235,17 @@ export const getUserDetails = (id) => async (dispatch) => {
       withCredentials: true,
     };
     const { data } = await axios.get(
-      `http://localhost:8000/api/v1/admin/user/${id}`,
+      `http://localhost:8000/user/${id}`,
       config
     );
     dispatch({
       type: USER_DETAILS_SUCCESS,
-      payload: data.user,
+      payload: data,
     });
   } catch (error) {
     dispatch({
       type: USER_DETAILS_FAIL,
-      payload: error.response.data.message || "Something went wrong",
+      payload: error?.response?.data?.message || "Something went wrong",
     });
   }
 };

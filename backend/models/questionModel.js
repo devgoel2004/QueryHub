@@ -50,5 +50,5 @@ const QuestionSchema = mongoose.Schema({
     },
   ],
 });
-
+QuestionSchema.index({ questionTitle: "text", questionBody: "text" });
 module.exports = mongoose.model("Question", QuestionSchema);
