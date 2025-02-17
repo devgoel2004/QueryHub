@@ -5,7 +5,79 @@
   margin-bottom: 15px;
   padding: 10px 0;
 }
+/* Pagination CSS */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+}
+.pagination {
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
+}
+.pagination li a {
+  color: white;
+}
+.page-item {
+  padding: 5px 10px;
+  background-color: tomato;
+  margin: 2px 5px;
+  border: 1px solid black;
+}
 
+/* Search Input */
+#search,
+.search-button {
+  height: var(--height);
+  font-family: var(--font-fam);
+  border: 0;
+  color: var(--color-dark);
+  font-size: 1.8rem;
+}
+#search {
+  width: 28vw;
+}
+input[type="search"] {
+  outline: 0;
+  background: var(--color-light);
+  padding: 0 1.6rem;
+  border-radius: var(--rad);
+  appearance: none;
+  transition: all var(--dur) var(--bez);
+  transition-property: width, border-radius;
+  z-index: 1;
+  position: relative;
+  /* width: 20vw; */
+}
+.search-button {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--btn-width);
+  font-weight: bold;
+  background: var(--color-brand);
+  border-radius: 0 var(--rad) var(--rad) 0;
+  background-color: tomato;
+  padding: 3px 7px;
+  border-radius: 50%;
+  color: white;
+}
+input:not(:placeholder-shown) {
+  border-radius: var(--rad) 0 0 var(--rad);
+  width: calc(100% - var(--btn-width));
+  + button {
+    display: block;
+  }
+}
+.searchBox {
+  position: relative;
+  width: 30vw;
+  background: var(--color-brand);
+  border-radius: var(--rad);
+}
 .questions-header h1 {
   font-size: 1.8rem;
   font-weight: 600;
@@ -30,6 +102,8 @@
 /* Filter Section */
 .filter {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 15px;
   margin-bottom: 15px;
   padding: 10px 0;
@@ -114,10 +188,30 @@
 .question-container p {
   font-weight: 400;
 }
-
+.newest {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
 @media (max-width: 767px) {
   .list-item {
     min-width: 80vw;
     max-width: 90vw;
+  }
+  .searchBox {
+    min-width: 75vw;
+  }
+  #search {
+    min-width: 70vw;
+    /* height: 5vh; */
+    font-size: large;
+  }
+  .search-button {
+    font-size: large;
+  }
+  .ask-button {
+    padding: 5px 8px;
+  }
+  .newest {
+    font-size: 1.56rem;
   }
 }

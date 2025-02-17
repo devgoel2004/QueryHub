@@ -30,7 +30,6 @@ import {
 export const getQuestions =
   (search = "", tag = "", sortBy = "createdAt", order = "desc", page = 1) =>
   async (dispatch) => {
-    console.log(search);
     try {
       dispatch({
         type: GET_QUESTIONS_REQUEST,
@@ -74,7 +73,6 @@ export const createQuestion = (questionData) => async (dispatch) => {
       questionData,
       config
     );
-    console.log(data);
 
     dispatch({
       type: ASK_QUESTION_SUCCESS,

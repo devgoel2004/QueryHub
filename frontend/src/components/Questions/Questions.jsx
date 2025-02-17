@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Question.css";
-import { FaAffiliatetheme, FaArrowAltCircleUp } from "react-icons/fa";
-import { FaArrowCircleDown } from "react-icons/fa";
+import { FaArrowCircleDown, FaArrowAltCircleUp } from "react-icons/fa";
+import { FaMagnifyingGlass } from "react-icons/fa6";
 import MetaData from "../MetaData/MetaData";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,10 +9,13 @@ import Loader from "../Loader/Loader";
 import { getQuestions } from "../../actions/questionActions";
 import { useAlert } from "react-alert";
 import axios from "axios";
+import { clearErrors } from "../../actions/userActions";
+import Pagination from "react-js-pagination";
 const Questions = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
+  const itemsPerPage = 10;
   const [value, setValue] = useState(0);
   const [search, setSearch] = useState("");
   const [tag, setTag] = useState("");
@@ -24,6 +27,11 @@ const Questions = () => {
   const { loading, questions, error, totalPages, totalQuestions } = useSelector(
     (state) => state.questions
   );
+  const handlePageChange = (pageNumber) => {
+    console.log(pageNumber);
+    setPage(pageNumber);
+    console.log(page);
+  };
   const upVoteHandler = () => {
     setValue(1);
   };
@@ -44,7 +52,7 @@ const Questions = () => {
   useEffect(() => {
     if (error) {
       alert.error(error);
-    
+      dispatch(clearErrors());
     }
     dispatch(getQuestions(searchValue, tag, sortBy, order, page));
     getTags();
@@ -66,13 +74,7 @@ const Questions = () => {
             display: "flex",
             justifyContent: "space-around",
           }}>
-          <h1
-            style={{
-              fontSize: "1.8rem",
-              fontWeight: "600",
-            }}>
-            Newest Questions
-          </h1>
+          <h1 className="newest">Newest Questions</h1>
           <button
             onClick={() => navigate("/queryhub/create/question")}
             className="ask-button">
@@ -87,19 +89,22 @@ const Questions = () => {
           {totalQuestions} questions
         </p>
         <div className="filter">
-          <input
-            type="text"
-            placeholder="Search questions..."
-            value={search}
-            className="input"
-            style={{
-              width: "40vw",
-              backgroundColor: "white",
-              border: "1px solid black",
-            }}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <button onClick={searchHandler}>Search</button>
+          <div className="searchBox">
+            <input
+              id="search"
+              type="search"
+              placeholder="Search..."
+              onChange={(e) => setSearch(e.target.value)}
+              autofocus
+              required
+            />
+            <button
+              className="search-button"
+              type="submit"
+              onClick={searchHandler}>
+              <FaMagnifyingGlass />
+            </button>
+          </div>
           <select value={tag} onChange={(e) => setTag(e.target.value)}>
             <option value="">All Tags</option>
             {tags.map((tag) => (
@@ -185,6 +190,19 @@ const Questions = () => {
             ))}
           </ul>
         </div>
+        {totalPages > 1 && (
+          <div className="pagination-container">
+            <Pagination
+              activePage={page}
+              itemsCountPerPage={itemsPerPage}
+              totalItemsCount={totalQuestions}
+              pageRangeDisplayed={5}
+              onChange={handlePageChange}
+              itemClass="page-item"
+              linkClass="page-link"
+            />
+          </div>
+        )}
       </div>
     </>
   );

@@ -48,8 +48,8 @@ exports.askQuestion = async (req, res) => {
 exports.getAllQuestions = async (req, res) => {
   try {
     let { page, limit, search, tag, sortBy, order } = req.query;
-    page = parseInt(page) | 1;
-    limit = parseInt(limit) || 10;
+    page = page || 1;
+    limit = limit || 10;
     let filter = {};
     if (search && search.trim() !== "") {
       const searchRegex = new RegExp(search, "i");

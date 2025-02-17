@@ -102,7 +102,9 @@ const Navbar = () => {
                 </button>
               </>
             )}
-            <button className="nav-links ask-question">
+            <button
+              onClick={() => navigate(`/queryhub/create/question`)}
+              className="nav-links ask-question">
               Ask Questions
               <FaArrowRight
                 style={{
