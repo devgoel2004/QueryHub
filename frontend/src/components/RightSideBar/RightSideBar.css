@@ -1,0 +1,74 @@
+/* Right Sidebar Container */
+.right-sidebar {
+  margin-top: 40px;
+  width: 20vw;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: "Arial", sans-serif;
+  margin-bottom: 20px;
+}
+
+/* Sidebar Heading */
+.right-sidebar h3,
+.announcements h3 {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #4a90e2;
+  padding-bottom: 5px;
+}
+
+/* Contributor List */
+.right-sidebar ol {
+  padding: 0;
+}
+
+.right-sidebar li {
+  padding: 8px 12px;
+  background: #f7f7f7;
+  margin: 5px 0;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+.right-sidebar li:hover {
+  background: #4a90e2;
+  color: white;
+  cursor: pointer;
+}
+
+/* Announcements Section */
+.announcements {
+  width: 20vw;
+  background: #f1f8ff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.announcements p {
+  font-size: 0.9em;
+  color: #333;
+  margin: 10px 0;
+}
+
+.announcements a {
+  color: #4a90e2;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.announcements a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .right-sidebar,
+  .announcements {
+    width: 100%;
+  }
+}

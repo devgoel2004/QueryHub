@@ -62,7 +62,7 @@ const Navbar = () => {
               Products
             </Link>
             <Link
-              to="/queryhub/home"
+              to="/queryhub/"
               className="nav-items nav-item nav-btn res-nav">
               Home
             </Link>
@@ -98,7 +98,7 @@ const Navbar = () => {
                   }}
                 />
                 <button className="nav-item nav-links" onClick={handleLogout}>
-                  Log out
+                  Log Out
                 </button>
               </>
             )}

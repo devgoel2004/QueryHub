@@ -1,13 +1,25 @@
 /* Container */
 .question-container {
   max-width: 800px;
-  margin: 30px auto;
+  margin: 80px auto;
   padding: 20px;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-
+.delete-question {
+  width: 100%;
+}
+p {
+  font-weight: 400;
+}
+.button-box {
+  display: flex;
+  justify-content: center;
+}
+.button {
+  width: 40%;
+}
 /* Title */
 .question-title {
   font-size: 24px;
@@ -89,4 +101,23 @@
 }
 .down {
   color: red;
+}
+
+/* Small devices (portrait tablets and large phones, 601px to 767px) */
+@media only screen and (min-width: 601px) and (max-width: 760px) {
+}
+
+/* Medium devices (landscape tablets, 768px to 991px) */
+@media only screen and (min-width: 760px) and (max-width: 991px) {
+  /* Add specific styles here */
+}
+
+/* Large devices (laptops/desktops, 992px to 1199px) */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  /* Add specific styles here */
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  /* Add specific styles here */
 }

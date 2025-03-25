@@ -11,11 +11,11 @@ import { useAlert } from "react-alert";
 import axios from "axios";
 import { clearErrors } from "../../actions/userActions";
 import Pagination from "react-js-pagination";
-const Questions = () => {
+const Questions = ({ limit }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
-  const itemsPerPage = 10;
+  const itemsPerPage = limit || 5;
   const [value, setValue] = useState(0);
   const [search, setSearch] = useState("");
   const [tag, setTag] = useState("");
@@ -28,9 +28,7 @@ const Questions = () => {
     (state) => state.questions
   );
   const handlePageChange = (pageNumber) => {
-    console.log(pageNumber);
     setPage(pageNumber);
-    console.log(page);
   };
   const upVoteHandler = () => {
     setValue(1);
@@ -51,30 +49,36 @@ const Questions = () => {
   };
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      alert.error(error || "Something went wrong");
       dispatch(clearErrors());
     }
-    dispatch(getQuestions(searchValue, tag, sortBy, order, page));
+    dispatch(getQuestions(searchValue, tag, sortBy, order, page, itemsPerPage));
     getTags();
-  }, [dispatch, alert, error, searchValue, tag, sortBy, order, page]);
+  }, [
+    dispatch,
+    alert,
+    error,
+    searchValue,
+    tag,
+    sortBy,
+    order,
+    page,
+    itemsPerPage,
+  ]);
   return loading ? (
     <>
       <Loader />
     </>
   ) : (
     <>
-      <MetaData title={"Questions"} />
-      <div
-        style={{
-          marginTop: "75px",
-        }}
-        className="question-container">
+      <MetaData title={"QUERYHUB || QUESTION"} />
+      <div className="question-container">
         <div
           style={{
             display: "flex",
             justifyContent: "space-around",
           }}>
-          <h1 className="newest">Newest Questions</h1>
+          <h1 className="newest">Questions</h1>
           <button
             onClick={() => navigate("/queryhub/create/question")}
             className="ask-button">
@@ -91,12 +95,13 @@ const Questions = () => {
         <div className="filter">
           <div className="searchBox">
             <input
-              id="search"
+              placeholder="....search"
               type="search"
-              placeholder="Search..."
-              onChange={(e) => setSearch(e.target.value)}
-              autofocus
+              name="search"
+              pattern=".*\S.*"
+              className="inputBox"
               required
+              onChange={(e) => setSearch(e.target.value)}
             />
             <button
               className="search-button"

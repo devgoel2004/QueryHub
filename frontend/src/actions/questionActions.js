@@ -28,7 +28,14 @@ import {
 } from "../constants/questionConstants";
 //GET QUESTIONS
 export const getQuestions =
-  (search = "", tag = "", sortBy = "createdAt", order = "desc", page = 1) =>
+  (
+    search = "",
+    tag = "",
+    sortBy = "tags",
+    order = "desc",
+    page = 1,
+    limit = itemsPerPage
+  ) =>
   async (dispatch) => {
     try {
       dispatch({
@@ -42,7 +49,7 @@ export const getQuestions =
       };
       const { data } = await axios.get(
         `http://localhost:8000/question`,
-        { params: { search, tag, sortBy, order, page } },
+        { params: { search, tag, sortBy, order, page, limit } },
         config
       );
       dispatch({

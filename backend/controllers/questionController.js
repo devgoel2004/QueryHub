@@ -48,6 +48,7 @@ exports.askQuestion = async (req, res) => {
 exports.getAllQuestions = async (req, res) => {
   try {
     let { page, limit, search, tag, sortBy, order } = req.query;
+
     page = page || 1;
     limit = limit || 10;
     let filter = {};

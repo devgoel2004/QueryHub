@@ -7,17 +7,14 @@
 .main-1 {
   min-width: 20vw;
   max-width: 20vw;
-  border: 1px solid blue;
 }
 .main-2 {
   min-width: 55vw;
   max-width: 55vw;
-  border: 1px solid black;
 }
 .main-3 {
-  min-width: 25vw;
-  max-width: 25vw;
-  border: 1px solid red;
+  min-width: 23vw;
+  max-width: 23vw;
 }
 
 @media (max-width: 767px) {
@@ -25,8 +22,8 @@
     display: none;
   }
   .main-2 {
-    max-width: 75vw;
-    min-width: 75vw;
+    max-width: 73vw;
+    min-width: 73vw;
   }
   .main-1 {
     max-width: 25vw;

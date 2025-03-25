@@ -27,9 +27,6 @@ const QuestionDetails = () => {
   } = useSelector((state) => state.questionDetails);
   const temp = useSelector((state) => state.questionCrud);
   const x = useSelector((state) => state.questionDetails);
-  // console.log(error);
-  console.log(questionDetailError);
-  console.log(temp);
   const alert = useAlert();
   const [answerBody, setAnswerBody] = useState("");
   const postAnswerHandler = (e) => {
@@ -42,7 +39,6 @@ const QuestionDetails = () => {
     alert.success("Deleted successfully");
   };
   const deleteQuestionHandler = () => {
-    console.log("delete");
     if (!isAuthenticated) {
       alert.error("User not authenticated");
       return;
@@ -53,16 +49,16 @@ const QuestionDetails = () => {
   };
   useEffect(() => {
     if (x.error) {
-      alert.error(x.error);
+      alert.error(x.error || "Something went wrong");
       dispatch(clearErrors());
       navigate(`/queryhub/questions`);
     }
     if (questionDetailError) {
-      alert.error(questionDetailError);
+      alert.error(questionDetailError || "Something went wrong");
       navigate(`/queryhub/questions`);
     }
     dispatch(getQuestion(id));
-  }, [dispatch, id, x.error,questionDetailError]); // This runs only when `id` changes
+  }, [dispatch, id, x.error, questionDetailError]); // This runs only when `id` changes
 
   return (
     <>
@@ -151,25 +147,17 @@ const QuestionDetails = () => {
                 onChange={(e) => setAnswerBody(e.target.value)}
               />
               <input type="file" className="input" placeholder="Image" />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}>
-                <button type="submit" className="button">
+              <div className="button-box">
+                <button type="submit" className="button post-answer">
                   Post Answer
+                </button>
+                <button
+                  onClick={deleteQuestionHandler}
+                  className="button delete-question">
+                  Delete Question
                 </button>
               </div>
             </form>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-              }}>
-              <button onClick={deleteQuestionHandler} className="button">
-                Delete Question
-              </button>
-            </div>
           </div>
         </>
         // <></>

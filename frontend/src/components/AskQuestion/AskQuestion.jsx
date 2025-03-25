@@ -71,10 +71,10 @@ const AskQuestion = () => {
       ) : (
         <>
           <div className="postQuestion">
-            <MetaData title="Ask Question" />
+            <MetaData title="QUERYHUB || ASK QUESTION" />
             <h1>Ask Question</h1>
             <form
-              action=""
+              action="POST"
               style={{
                 display: "flex",
                 flexDirection: "column",
