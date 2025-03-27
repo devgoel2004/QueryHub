@@ -20,8 +20,18 @@ const userSchema = mongoose.Schema({
     unique: true,
     validate: [validator.isEmail, "Please enter a valid email"],
   },
+  otp: String,
+  createdAt: {
+    type: Date,
+    expires: "5m",
+    default: Date.now,
+  },
   password: {
     type: String,
+  },
+  verified: {
+    type: Boolean,
+    default: false,
   },
   phone: {
     type: Number,

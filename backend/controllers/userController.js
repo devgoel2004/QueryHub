@@ -4,6 +4,7 @@ const generateToken = require("../utils/generateToken");
 const { sendToken } = require("../utils/generateToken");
 const cloudinary = require("cloudinary");
 const sendEmail = require("../utils/sendEmail");
+const otpGenerator = require("otp-generator");
 //Register a User
 //need to add cloudinary
 exports.registerUser = async (req, res) => {
@@ -294,6 +295,7 @@ exports.updateProfile = async (req, res) => {
 exports.getAllUser = async (req, res) => {
   try {
     const user = await User.find();
+    console.log("Hello world");
     res.status(200).json({
       success: true,
       user,
@@ -372,6 +374,71 @@ exports.getSingleUserDetails = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal error",
+      error,
+    });
+  }
+};
+
+//Generate OTP
+const generateOTP = async (req, res, next) => {
+  const { email } = req.body;
+  const otp = otpGenerator.generate(6, {
+    digits: true,
+    lowerCaseAlphabets: false,
+    upperCaseAlphabets: false,
+    specialChars: false,
+    alphabets: false,
+  });
+  try {
+    const user = await User.findOneAndUpdate(
+      { email: email },
+      {
+        otp: otp,
+      }
+    );
+    const subject = "OTP Verification";
+    const message = `Your OTP for verification is: ${otp}`;
+    sendEmail(email, subject, message);
+    res.status(200).json({
+      success: true,
+      message: "Mail Sent.",
+    });
+  } catch (error) {
+    console.log("error:", error);
+    res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+      error,
+    });
+  }
+};
+
+const verifyOTP = async (req, res, next) => {
+  const { email, otp } = req.body;
+  try {
+    const otpRecord = await User.findOne({ email, otp }).exec();
+    if (otpRecord) {
+      await User.findOneAndUpdate(
+        { email: email },
+        {
+          verified: true,
+        }
+      );
+      res.status(200).json({
+        success: true,
+        message: "OTP verified successfully",
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Invalid OTP",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      success: "Internal Server Error",
+      success: false,
       error,
     });
   }

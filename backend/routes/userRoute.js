@@ -24,5 +24,6 @@ router.route("/me").get(isAuthenticatedUser, getSingleUser);
 router.route("/password/update").put(isAuthenticatedUser, updatePassword);
 router.route("/me/update").put(isAuthenticatedUser, updateProfile);
 router.route("/:id").get(isAuthenticatedUser, getSingleUserDetails);
+router.route("/get/users").get(getAllUser);
 
 module.exports = router;
