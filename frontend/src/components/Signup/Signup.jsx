@@ -7,6 +7,9 @@ import MetaData from "../MetaData/MetaData";
 import { clearErrors, register } from "../../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+
 const Signup = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
@@ -14,6 +17,7 @@ const Signup = () => {
   const { error, loading, isAuthenticated } = useSelector(
     (state) => state.user
   );
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -27,6 +31,9 @@ const Signup = () => {
     myForm.set("password", password);
     myForm.set("image", image);
     dispatch(register(myForm));
+  };
+  const showPasswordHandler = () => {
+    setShowPassword((prev) => !prev);
   };
   const handleGoogleSignup = () => {
     window.open("http://localhost:8000/auth/google", "_self");
@@ -97,15 +104,32 @@ const Signup = () => {
                 }}
               />
               <img src={imagePreview} alt="" />
-              <input
-                className="input"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
+              <div className="inputBox">
+                <input
+                  className="input"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+                {showPassword ? (
+                  <>
+                    <FaEyeSlash
+                      onClick={showPasswordHandler}
+                      className="eye-button"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <FaEye
+                      onClick={showPasswordHandler}
+                      className="eye-button"
+                    />
+                  </>
+                )}
+              </div>
               <button type="submit" className="button">
                 Register
               </button>

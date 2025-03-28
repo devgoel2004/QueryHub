@@ -380,14 +380,13 @@ exports.getSingleUserDetails = async (req, res) => {
 };
 
 //Generate OTP
-const generateOTP = async (req, res, next) => {
+exports.generateOTP = async (req, res, next) => {
   const { email } = req.body;
   const otp = otpGenerator.generate(6, {
     digits: true,
     lowerCaseAlphabets: false,
     upperCaseAlphabets: false,
     specialChars: false,
-    alphabets: false,
   });
   try {
     const user = await User.findOneAndUpdate(
@@ -398,7 +397,7 @@ const generateOTP = async (req, res, next) => {
     );
     const subject = "OTP Verification";
     const message = `Your OTP for verification is: ${otp}`;
-    sendEmail(email, subject, message);
+    sendEmail({ email, subject, message });
     res.status(200).json({
       success: true,
       message: "Mail Sent.",
@@ -413,7 +412,7 @@ const generateOTP = async (req, res, next) => {
   }
 };
 
-const verifyOTP = async (req, res, next) => {
+exports.verifyOTP = async (req, res, next) => {
   const { email, otp } = req.body;
   try {
     const otpRecord = await User.findOne({ email, otp }).exec();

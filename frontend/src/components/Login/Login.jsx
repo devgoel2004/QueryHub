@@ -7,6 +7,9 @@ import { clearErrors, login } from "../../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Loader/Loader";
 import { useAlert } from "react-alert";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+
 const Login = () => {
   const alert = useAlert();
   const dispatch = useDispatch();
@@ -16,13 +19,18 @@ const Login = () => {
   );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const loginSubmit = (e) => {
     e.preventDefault();
+    setShowPassword(false);
     dispatch(login(email, password));
     console.log(dispatch(login(email, password)));
   };
   const handleGoogleLogin = () => {
     window.open("http://localhost:8000/auth/google", "_self");
+  };
+  const showPasswordHandler = () => {
+    setShowPassword((prev) => !prev);
   };
   useEffect(() => {
     if (error) {
@@ -65,13 +73,30 @@ const Login = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
-                    <input
-                      className="input"
-                      type="password"
-                      placeholder="Password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
+                    <div className="inputBox">
+                      <input
+                        className="input"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                      {showPassword ? (
+                        <>
+                          <FaEyeSlash
+                            onClick={showPasswordHandler}
+                            className="eye-button"
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <FaEye
+                            onClick={showPasswordHandler}
+                            className="eye-button"
+                          />
+                        </>
+                      )}
+                    </div>
                     <Link to="/queryhub/forgot/password">
                       Forgot your password?
                     </Link>

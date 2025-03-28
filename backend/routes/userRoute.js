@@ -12,6 +12,8 @@ const {
   getSingleUser,
   deleteUser,
   getSingleUserDetails,
+  generateOTP,
+  verifyOTP,
 } = require("../controllers/userController");
 const { isAuthenticatedUser } = require("../middleware/authentication");
 const router = express.Router();
@@ -25,5 +27,6 @@ router.route("/password/update").put(isAuthenticatedUser, updatePassword);
 router.route("/me/update").put(isAuthenticatedUser, updateProfile);
 router.route("/:id").get(isAuthenticatedUser, getSingleUserDetails);
 router.route("/get/users").get(getAllUser);
-
+router.route(`/generate-otp`).post(isAuthenticatedUser, generateOTP);
+router.route(`/verify-otp`).post(isAuthenticatedUser,verifyOTP);
 module.exports = router;

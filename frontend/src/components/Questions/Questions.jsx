@@ -67,6 +67,7 @@ const Questions = ({ limit }) => {
   ]);
   return loading ? (
     <>
+      <MetaData title={"QUERYHUB || QUESTION"} />
       <Loader />
     </>
   ) : (

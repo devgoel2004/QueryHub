@@ -25,6 +25,10 @@
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
+.inputBox {
+  display: flex;
+  justify-content: center;
+}
 .google-button .icons {
   padding-right: 2px;
 }
@@ -94,12 +98,23 @@ button.ghost {
   text-align: center;
 }
 
-.input {
+.input,
+.inputBox .input {
   background-color: #eee;
   border: none;
   padding: 12px 15px;
   margin: 8px 0;
   width: 100%;
+}
+.inputBox {
+  width: 100%;
+  align-items: center;
+}
+.eye-button {
+  border: none;
+  background-color: white;
+  /* padding: 5px; */
+  /* font-size: 20px; */
 }
 
 .container {

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "../Loader/Loader";
 import "./Profile.css";
@@ -9,6 +9,7 @@ import { clearErrors } from "../../actions/userActions";
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isVerified, setIsVerified] = useState(false);
   const { user, error, loading, isAuthenticated } = useSelector(
     (state) => state.user
   );
@@ -16,6 +17,10 @@ const Profile = () => {
   const updateNavigate = () => {
     navigate("/queryhub/profile/update");
   };
+  const sendOTP = (email) => {
+    console.log(email);
+  };
+
   useEffect(() => {
     if (error) {
       alert.error(error);
@@ -55,7 +60,18 @@ const Profile = () => {
               <p>Phone: {user?.phone}</p>
               <p>About:{user?.about}</p>
               <p>{user?.tags}</p>
-              <p>Email: {user?.email}</p>
+              <p>
+                Email: {user?.email}
+                {` `}
+                <span>
+                  {isVerified ? (
+                    <span className="green"> verified</span>
+                  ) : (
+                    <span className="red">not verified</span>
+                  )}
+                </span>
+              </p>
+              <button onClick={sendOTP(user.email)}>Verify</button>
               <p>
                 Badge: <span className={`${user?.badge}`}>{user?.badge}</span>
               </p>

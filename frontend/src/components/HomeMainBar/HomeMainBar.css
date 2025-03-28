@@ -1,21 +1,38 @@
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-  .ask-button {
+.sidebar {
+  margin: 0px;
+}
+.questions-container {
+  max-width: 800px;
+  /* margin: 80px auto; */
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+}
+/* Extra small devices (phones, 599px and down) */
+@media only screen and (max-width: 599px) {
+  /* Styles for phones */
+  .newest {
+    font-size: 1.5rem;
   }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 600px) and (max-width: 767px) {
+  /* Styles for small tablets */
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  /* Styles for landscape tablets */
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  /* Styles for laptops */
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
+  /* Styles for large desktops */
 }
