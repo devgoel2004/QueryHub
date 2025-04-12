@@ -12,15 +12,25 @@ export const sendOTP = (email) => async (dispatch) => {
     dispatch({
       type: SEND_OTP_REQUEST,
     });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    };
+    console.log("hello world");
     const { data } = await axios.post(
       `http://localhost:8000/user/generate-otp`,
-      { email }
+      { email },
+      config
     );
+    console.log(data);
     dispatch({
       type: SEND_OTP_SUCCESS,
       payload: data,
     });
   } catch (error) {
+    console.log(error);
     dispatch({
       type: SEND_OTP_FAIL,
       payload: error.response.data.message,

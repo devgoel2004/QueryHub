@@ -6,6 +6,9 @@ import { useAlert } from "react-alert";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { clearErrors } from "../../actions/userActions";
+import { sendOTP } from "../../actions/otpActions";
+import axios from "axios";
+import MetaData from "../MetaData/MetaData";
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -13,14 +16,31 @@ const Profile = () => {
   const { user, error, loading, isAuthenticated } = useSelector(
     (state) => state.user
   );
+  useSelector((state) => state.otp);
   const alert = useAlert();
   const updateNavigate = () => {
     navigate("/queryhub/profile/update");
   };
-  const sendOTP = (email) => {
+  const sendOtp = async (email) => {
     console.log(email);
+    const { data } = await axios.post(
+      "http://localhost:8000/user/generate-otp",
+      {
+        email,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    if (data.success) {
+      alert.success(data.message);
+      navigate("/queryhub/verify-email");
+    }
+    console.log(data);
   };
-
   useEffect(() => {
     if (error) {
       alert.error(error);
@@ -37,7 +57,7 @@ const Profile = () => {
     return () => {
       clearTimeout(timeOut);
     };
-  }, [isAuthenticated, loading, user, alert, navigate, error]);
+  }, [isAuthenticated, loading, alert, navigate, error, dispatch]);
   const handleLogout = () => {
     window.open("http://localhost:8000/auth/logout", "_self");
   };
@@ -50,6 +70,7 @@ const Profile = () => {
       <div className="profile">
         {user ? (
           <>
+            <MetaData title="" />
             <div style={{ textAlign: "center" }}>
               <h2>Welcome {user?.name}</h2>
               <img
@@ -71,7 +92,7 @@ const Profile = () => {
                   )}
                 </span>
               </p>
-              <button onClick={sendOTP(user.email)}>Verify</button>
+              <button onClick={() => sendOtp(user?.email)}>Verify</button>
               <p>
                 Badge: <span className={`${user?.badge}`}>{user?.badge}</span>
               </p>

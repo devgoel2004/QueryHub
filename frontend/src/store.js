@@ -8,6 +8,7 @@ import {
   userReducer,
   profileReducer,
 } from "./reducers/usersReducer";
+import { otpReducer } from "./reducers/otpReducers";
 import {
   questionsReducer,
   questionDetailsReducer,
@@ -23,6 +24,7 @@ const reducer = combineReducers({
   questions: questionsReducer,
   questionDetails: questionDetailsReducer,
   questionCrud: questionCrudReducer,
+  otp: otpReducer,
 });
 let initialState = {};
 

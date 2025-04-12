@@ -20,11 +20,15 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const loginSubmit = (e) => {
-    e.preventDefault();
-    setShowPassword(false);
-    dispatch(login(email, password));
-    console.log(dispatch(login(email, password)));
+  const loginSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      setShowPassword(false);
+      dispatch(login(email, password));
+      console.log(dispatch(login(email, password)));
+    } catch (error) {
+      alert.error(error);
+    }
   };
   const handleGoogleLogin = () => {
     window.open("http://localhost:8000/auth/google", "_self");
@@ -44,6 +48,8 @@ const Login = () => {
   }, [error, isAuthenticated, alert]);
   return (
     <>
+      <MetaData title={`QUERYHUB || LOGIN`} />
+
       {loading ? (
         <>
           <Loader></Loader>
@@ -51,7 +57,6 @@ const Login = () => {
       ) : (
         <>
           <>
-            <MetaData title={`Login Page`} />
             <div className="body">
               <div className="container" id="container">
                 <div className="form-container sign-in-container">

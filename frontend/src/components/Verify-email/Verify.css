@@ -1,0 +1,20 @@
+.verify-box {
+  min-height: 90vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.verify-box button {
+  background-color: tomato;
+  padding: 7px 10px;
+  border: none;
+  color: white;
+  margin-left: 5px;
+  border-radius: 4px;
+}
+.verify-box input {
+  padding: 5px 10px;
+  width: 40vw;
+}

@@ -13,16 +13,11 @@ const tagRoute = require("./routes/tagRoute");
 const app = express();
 const mongoose = require("mongoose");
 require("dotenv").config();
-
+const DB_URL = process.env.DB_URL;
 mongoose
-  .connect(process.env.DB_URL)
-  .then(() => {
-    console.log("Connected");
-  })
-  .catch((err) => {
-    console.log("Database error", err);
-  });
-
+  .connect(DB_URL)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((error) => console.error("❌ MongoDB connection error:", error));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: true }));

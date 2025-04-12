@@ -295,7 +295,6 @@ exports.updateProfile = async (req, res) => {
 exports.getAllUser = async (req, res) => {
   try {
     const user = await User.find();
-    console.log("Hello world");
     res.status(200).json({
       success: true,
       user,
@@ -380,7 +379,7 @@ exports.getSingleUserDetails = async (req, res) => {
 };
 
 //Generate OTP
-exports.generateOTP = async (req, res, next) => {
+exports.generateOTP = async (req, res) => {
   const { email } = req.body;
   const otp = otpGenerator.generate(6, {
     digits: true,
@@ -398,12 +397,12 @@ exports.generateOTP = async (req, res, next) => {
     const subject = "OTP Verification";
     const message = `Your OTP for verification is: ${otp}`;
     sendEmail({ email, subject, message });
+    console.log("hello world");
     res.status(200).json({
       success: true,
       message: "Mail Sent.",
     });
   } catch (error) {
-    console.log("error:", error);
     res.status(500).json({
       message: "Internal Server Error",
       success: false,
@@ -412,10 +411,15 @@ exports.generateOTP = async (req, res, next) => {
   }
 };
 
-exports.verifyOTP = async (req, res, next) => {
+exports.verifyOTP = async (req, res) => {
   const { email, otp } = req.body;
+  console.log(otp);
+  console.log(email);
   try {
+    const element = await User.findOne({ email: email });
+    console.log(element);
     const otpRecord = await User.findOne({ email, otp }).exec();
+    console.log(otpRecord);
     if (otpRecord) {
       await User.findOneAndUpdate(
         { email: email },
@@ -434,7 +438,6 @@ exports.verifyOTP = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(400).json({
       success: "Internal Server Error",
       success: false,

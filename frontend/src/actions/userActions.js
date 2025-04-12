@@ -13,8 +13,10 @@ import {
   LOGOUT_FAIL,
   UPDATE_PROFILE_REQUEST,
   USER_DETAILS_FAIL,
-  UPDATE_PROFILE_RESET,
   UPDATE_PROFILE_SUCCESS,
+  FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_FAIL,
+  FORGOT_PASSWORD_SUCCESS,
   UPDATE_PROFILE_FAIL,
   UPDATE_PASSWORD_REQUEST,
   UPDATE_PASSWORD_SUCCESS,
@@ -35,6 +37,7 @@ export const login = (email, password) => async (dispatch) => {
       },
       withCredentials: true,
     };
+    console.log("hello world");
     const { data } = await axios.post(
       `${url}/user/login`,
       { email, password },
@@ -126,7 +129,7 @@ export const updateProfile = (userData) => async (dispatch) => {
       withCredentials: true,
     };
     const { data } = await axios.put(`${url}/user/me/update`, userData, config);
-    
+
     dispatch({
       type: UPDATE_PROFILE_SUCCESS,
       payload: data.success,
